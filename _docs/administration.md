@@ -13,7 +13,7 @@ This usually means you can set it up your system once, and then have it remain t
 
 > I want that "defaults lifestyle" --<a href="https://www.softwaredefinedtalk.com/hosts/matt">Matt Ray</a>
 
-![image](https://github.com/user-attachments/assets/3f83b3a8-7d8d-492d-bb00-bee259d16592)
+![Bluefin Desktop Environment Illustration](https://github.com/user-attachments/assets/3f83b3a8-7d8d-492d-bb00-bee259d16592)
 
 ## Installing Applications
 
@@ -22,7 +22,7 @@ This usually means you can set it up your system once, and then have it remain t
 Use the GNOME Software Center to [install applications from Flathub](https://flathub.org/). System updates and upgrades are not handled by this application, it's scope has been reduced to only install Flatpaks from Flathub. 
 The [Warehouse](https://flathub.org/apps/io.github.flattool.Warehouse) tool is included for management.
 
-![86e06ae4-0aec-46ef-9709-936c3e938f70](https://github.com/user-attachments/assets/65b6cae5-9ed4-4d28-93b4-b6dfe9adf463)
+![GNOME Software Center - App Illustration](https://github.com/user-attachments/assets/65b6cae5-9ed4-4d28-93b4-b6dfe9adf463)
 
 ### Command Line Applications
 
@@ -38,7 +38,7 @@ Bluefin is designed to be "hands off". System updates apply weekly, and Flatpaks
 
 Machine firmware updates are provided through the standard Software Center:
 
-![b6706ae4-d519-4508-b350-defce27aa8e4](https://github.com/user-attachments/assets/98256d26-87ff-458f-a5f1-ecfa31a4639c)
+![Software Center → Updates](https://github.com/user-attachments/assets/98256d26-87ff-458f-a5f1-ecfa31a4639c)
 
 ### Upgrades and Throttle Settings
 
@@ -75,10 +75,9 @@ Note: The kernel-fsync kernel removes the need to have dedicated Asus and Surfac
 
 ### Managing Updates
 
-In Settings->Network set `Metered Connection: has data limits or can incur charges` to pause Bluefin updates: 
+In Settings → Network → A network setting, set `Metered Connection: has data limits or can incur charges` to pause Bluefin updates: 
 
-![image](https://github.com/user-attachments/assets/e550b5c4-391e-4903-8836-20596f5f3020)
-
+![Settings → Network → A network setting - `Metered Connection: has data limits or can incur charges` Highlight](https://github.com/user-attachments/assets/2919692c-7e03-4694-8193-3f2f77f029fb)
 
 ### Switching between channels
 
@@ -86,25 +85,23 @@ In Settings->Network set `Metered Connection: has data limits or can incur charg
 
 Use the `ujust rebase-helper` command to select rebase and select a specific channel: 
 
-![image](https://github.com/user-attachments/assets/72308e84-cd28-4fd1-a568-38fb889203fe)
-
+![`ujust rebase-helper` - channel](https://github.com/user-attachments/assets/72308e84-cd28-4fd1-a568-38fb889203fe)
 
 Or select `date` and choose an older image. 
 
-![image](https://github.com/user-attachments/assets/567061da-036d-4779-873e-154a5a833e67)
-
+![`ujust rebase-helper` - date](https://github.com/user-attachments/assets/567061da-036d-4779-873e-154a5a833e67)
 
 #### Switching between tags manually
 
 Here are the manual commands with rpm-ostree, we recommend becoming familiar with them if you find yourself rebasing often. Before changing a channel it is recommended to remove any locally layered packages: 
 
-```bash
+```sh
 rpm-ostree reset
 ```
 
 Then run a status:
 
-```bash
+```sh
 rpm-ostree status
 ```
 
@@ -116,34 +113,34 @@ The `ghcr.io/ublue-os/bluefin:gts` is the important part, with `bluefin` being t
 
 In this example we're rebasing to `:stable`, which is the latest stable release of Fedora (currently 40): 
 
-```bash
+```sh
 rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/bluefin:stable
 ```
 To always be on the `:gts` (default) release:
 
-```bash
+```sh
 rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/bluefin:gts
 ```
 Explicit version tags of the Fedora release are available for users who wish to handle their upgrade cycle manually:
 
-```bash
+```sh
 rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/bluefin:40
 ```
 Additionally rebasing to a specific date tag is encouraged if you need to "pin" to a specific day or version:
 
-```bash
+```sh
 rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/bluefin:38-20231101
 ```
 
 If you use an nvidia machine, remember that the `-nvidia` is important! (This is why it's important to note the image name when you ran that previous status command:
 
-```bash
+```sh
 rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/bluefin-nvidia:stable
 ```
 
 Use the `skopeo inspect` command to query information from an image:
 
-```bash
+```sh
 skopeo inspect docker://ghcr.io/ublue-os/bluefin
 ```
 
@@ -180,11 +177,11 @@ Note that generally speaking the project tries to keep the system Justfiles fine
 
 Bluefin uses the [Extension Manager](https://flathub.org/apps/com.mattjakeman.ExtensionManager) by Matthew Jakeman to manage the desktop extensions. The application is included by default. You can access it via the [Logo Menu](https://github.com/Aryan20/Logomenu) (thanks Aryan Kaushik!)
 
-![image](https://github.com/user-attachments/assets/c5ad1637-95c9-4692-8b25-e8ca6248e575)
+![GNOME Extension Menu Option (opens Extension Manager)](https://github.com/user-attachments/assets/c5ad1637-95c9-4692-8b25-e8ca6248e575)
 
 This is useful if you decide you do not want to use some of the ones bundled with Bluefin. 
 
-![extensions](https://github.com/user-attachments/assets/2ea316d3-bb71-461c-95dd-f119600d1568)
+![Extension Manager - System Extensions Highlight](https://github.com/user-attachments/assets/1d9756ce-fc1a-49da-a42e-89e275b80c91)
 
 >**Note**: If your session crashes, then all of your extensions will be disabled.
 
@@ -204,11 +201,11 @@ Bluefin and Aurora include Cockpit for machine management. We're hoping to inclu
 
 Bluefin ships [Ptyxis](https://devsuite.app/ptyxis/) as the default terminal. It shows up as `Terminal` in the menu. It is **strongly recommended** that you [change your shell via the terminal emulator instead of system-wide](https://tim.siosm.fr/blog/2023/12/22/dont-change-defaut-login-shell/). Click on the Terminal settings and edit your profile:
 
-![image](https://github.com/user-attachments/assets/2c122205-dbd8-41e6-8b7b-4f536c3b69e9)
+![Ptyxis → Preferences → Profiles → A Profile Setting → Edit...](https://github.com/user-attachments/assets/2c122205-dbd8-41e6-8b7b-4f536c3b69e9)
 
 Then select "Use Custom Command" and then add the shell you want to use. `/usr/bin/fish` and `/usr/bin/zsh` are both included on the image: 
 
-![image](https://github.com/user-attachments/assets/8eb039db-7ec1-4847-b3d7-496d69fe9538)
+![Ptyxis → Preferences → Profiles → A Profile Setting → Edit... → Shell → Custom Command](https://github.com/user-attachments/assets/8eb039db-7ec1-4847-b3d7-496d69fe9538)
 
 ### Adjusting the transparency
 
@@ -220,7 +217,6 @@ See the [bluefin-cli](https://docs.projectbluefin.io/bluefin-dx#bluefin-cli) sec
 
 These images are signed with sigstore's [cosign](https://docs.sigstore.dev/cosign/overview/). You can verify the signature by downloading the `cosign.pub` key from [this repo](https://github.com/ublue-os/bluefin) and running the following command:
 
-```bash
+```sh
 cosign verify --key cosign.pub ghcr.io/ublue-os/bluefin
 ```
-
