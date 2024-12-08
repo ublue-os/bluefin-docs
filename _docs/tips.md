@@ -16,6 +16,12 @@ Here are some GNOME extensions that the maintainers recommend to round out your 
 
 ![image](https://github.com/user-attachments/assets/e464a88b-1a2d-4fa3-8a6b-e2ebfb0dda53)
 
+- [Wiggle](https://extensions.gnome.org/extension/6784/wiggle/) - Another "I want my system to look like a Mac" extension, but honestly it is quite handy for finding your cursor most of the time 
+![Wiggle Demonstration](https://extensions.gnome.org/extension-data/screenshots/screenshot_6784_NnfNleK.gif)
+
+- [Control  monitor brightness and volume with ddcutil](https://extensions.gnome.org/extension/6325/control-monitor-brightness-and-volume-with-ddcutil/) - Lengthy name, but for sure really useful! I've never known that my external monitors even had those capabilities before I tested it out.
+![Ddcutil Demonstration](https://extensions.gnome.org/extension-data/screenshots/screenshot_6325_iQnSUzg.png)
+
 # Building Your Own Bluefin
 
 Use the [image template](https://github.com/ublue-os/image-template) to make your own custom Bluefin image. Here are the maintainer custom images if you're looking for examples:
