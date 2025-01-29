@@ -17,9 +17,10 @@ GPU Acceleration for both Nvidia and AMD are included out of the box and usually
 
 Since Alpaca doesn't expose any API, if you need other applications than Alpaca to interact with your ollama instance (for example an IDE) you should consider installing it [in a docker container](https://hub.docker.com/r/ollama/ollama).
 
-To do so, first configure docker to use the nvidia drivers (that come preinstalled with Bluefin) with:
+To do so, first configure docker to use the nvidia drivers (that come preinstalled with Bluefin). This is only required with docker and not with podman.
 
 ```bash
+# Only required for Docker, Not required for Podman
 sudo nvidia-ctk runtime configure --runtime=docker
 sudo systemctl restart docker
 ```
@@ -27,6 +28,7 @@ sudo systemctl restart docker
 Then, choose a folder where to install the ollama container (for example `~/Containers/ollama`) and inside it create a new file named `docker-compose.yaml` with the following content:
 
 ```yaml
+# docker compose
 ---
 services:
   ollama:
@@ -36,7 +38,7 @@ services:
     ports:
       - 11434:11434
     volumes:
-      - ./ollama_v:/root/.ollama
+      - ./ollama_v:/root/.ollama:z
     deploy:
       resources:
         reservations:
@@ -45,10 +47,38 @@ services:
                 - gpu
 ```
 
+```yaml
+# podman-compose
+---
+services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - 11434:11434
+    volumes:
+      - ./ollama_v:/root/.ollama:z
+    devices:
+      - nvidia.com/gpu=all
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+                - gpu
+
+```
+
+
 Finally, open a terminal in the folder containing the file just created and start the container with
 
 ```bash
 docker compose up -d
+# or
+sudo podman-compose up -d
+# podman needs to be run as root for nvidia gpu passthrough until this is fixed
+# https://github.com/containers/podman/issues/19338
 ```
 
 and your ollama instance should be up and running at `http://127.0.0.1:11434`!
