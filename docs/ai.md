@@ -17,7 +17,7 @@ GPU Acceleration for both Nvidia and AMD are included out of the box and usually
 
 Since Alpaca doesn't expose any API, if you need other applications than Alpaca to interact with your ollama instance (for example an IDE) you should consider installing it [in a docker container](https://hub.docker.com/r/ollama/ollama).
 
-To do so, first configure docker to use the nvidia drivers (that come preinstalled with Bluefin). This is only required with docker and not with podman.
+To do so, first configure docker to use the nvidia drivers (that come preinstalled with Bluefin).
 
 ```bash
 # Only required for Docker, Not required for Podman
@@ -38,7 +38,7 @@ services:
     ports:
       - 11434:11434
     volumes:
-      - ./ollama_v:/root/.ollama:z
+      - ./ollama_v:/root/.ollama
     deploy:
       resources:
         reservations:
