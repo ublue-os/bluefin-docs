@@ -43,9 +43,84 @@ quay.io/ramalama/rocm                      latest      8875feffdb87  5 days ago 
 
 ## Ollama API
 
-Since Alpaca doesn't expose any API, if you need other applications than Alpaca to interact with your ollama instance (for example an IDE) you should consider installing it [in a docker container](https://hub.docker.com/r/ollama/ollama).
+Since Alpaca doesn't expose any API, if you need other applications than Alpaca to interact with your ollama instance (for example an IDE) you should consider installing it in a [container](https://hub.docker.com/r/ollama/ollama).
 
-To do so, first configure docker to use the nvidia drivers (that come preinstalled with Bluefin) with:
+#### Quadlet (recommended)
+`~/.local/share/systemd/ollama.container`
+```
+[Unit]
+Description=Ollama Service
+After=network.target local-fs.target
+
+[Container]
+Image=ollama/ollama:latest
+ContainerName=ollama
+AutoUpdate=yes
+PublishPort=11434:11434
+Volume=./ollama_v:/root/.ollama:z
+Device=/dev/nvidia*:ro
+Deploy=resources.reservations.devices.capabilities=gpu
+
+[Service]
+RestartUnlessStopped=yes
+TimeoutStartSec=60s
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```sh
+❯ systemctl --user daemon-reload
+
+# start Ollama podlet for current session
+❯ systemctl --user start ollama
+❯ systemctl --user status ollama
+
+# start Ollama podlet automatically after reboot
+❯ systemctl --user enable ollama
+
+# connect to ollama
+❯ ollama list
+
+# download and run model https://ollama.com/search
+❯ ollama run <model>
+```
+
+
+#### Podman Compose
+> **NOTE:** Podman needs to be run with sudo for nvidia gpu passthrough until [this](https://github.com/containers/podman/issues/19338) issue is fixed.
+> 
+Create this `podman-compose.yaml file
+
+```yaml
+---
+services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - 11434:11434
+    volumes:
+      - ./ollama_v:/root/.ollama:z
+    devices:
+      - nvidia.com/gpu=all
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+                - gpu
+
+```
+
+`❯ sudo podman-compose up -d`
+
+
+
+#### Docker Compose
+
+To do so, first configure docker to use the nvidia drivers (that come preinstalled with Bluefin).
 
 ```bash
 sudo nvidia-ctk runtime configure --runtime=docker
@@ -72,6 +147,7 @@ services:
             - capabilities:
                 - gpu
 ```
+
 
 Finally, open a terminal in the folder containing the file just created and start the container with
 
