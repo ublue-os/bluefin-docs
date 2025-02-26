@@ -7,7 +7,8 @@ slug: /bluefin-dx
 The Bluefin Developer Experience (`bluefin-dx`) is a dedicated developer image with bundled tools. Unlike traditional Linux systems, the operating system and developer environment are explicitly and purposely separated. This means that tooling is not installed on the host, and is instead containerized, in a virtual machine, or scoped to the user's home directory. It is designed to meet the following use cases:
 
 - Endeavors to be the world's most powerful [cloud native developer environment](https://landscape.cncf.io/)
-- Full virtualization support centered around KVM and QEMU
+- Full virtualization support centered around QEMU/KVM, as well as support for Docker and Incus
+- [Bluefin GDX](/gdx) variant specifically designed for AI and Machine Learning 
 
 ## The Cloud Native Development Approach
 
@@ -173,6 +174,10 @@ DevPod also has support for JetBrains:
 - [kind](https://kind.sigs.k8s.io/) - Run a Kubernetes cluster on your machine. Run `kind create cluster` on the host to get started!
   - [kubectl](https://kubernetes.io/docs/reference/kubectl/) - Administer Kubernetes Clusters
   - [k9s](https://k9scli.io/), [kubectx](https://github.com/ahmetb/kubectx), and [helm](https://helm.sh/). If you feel there's a tool that should be included by default, send a PR [to this file](https://github.com/ublue-os/bluefin/blob/main/system_files/shared/usr/share/ublue-os/homebrew/kubernetes.Brewfile). But let's not overdo it. 😄
+ 
+## Ramalama
+
+[Ramalama](https://github.com/containers/ramalama) is included for local management and serving of AI models. Check the [AI documentation](/ai) for more information. 
 
 ## Virtualization and Container Runtimes
 

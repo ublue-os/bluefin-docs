@@ -9,7 +9,9 @@ Bluefin is a high performance predator, the team believes in the importance of i
 >
 > -- James Vowles
 
-## Fedora
+## Fedora Countme Statistics
+
+<img src="https://raw.githubusercontent.com/ublue-os/countme/refs/heads/main/growth_nonbazzite.svg" alt="Bluefin's CountMe Stats" decoding="async" loading="lazy" width="1280" height="720" />
 
 The Fedora countme service is on by default in Fedora, and we inherit that behavior:
 

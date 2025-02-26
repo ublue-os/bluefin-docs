@@ -1,6 +1,7 @@
 ---
 title: Welcome to Bluefin
 slug: /
+pagination_next: introduction
 ---
 
 # Welcome to Bluefin
@@ -15,6 +16,10 @@ For end users it provides a system as reliable as a Chromebook with near-zero ma
 
 Bluefin, like all [Universal Blue](https://universal-blue.org) images, is a next generation Linux desktop, generally speaking it trends towards progressive improvement; the team rigorously and aggressively moves away from legacy technologies as soon as possible in order to provide the best possible experience.
 
+> Some might be so inclined to say that Bluefin would best serve developers or experienced Linux users, but I would argue that it’s an equally strong contender for new users because of how reliable it is and how well-configured it comes out of the box.
+>
+> [Jack Wallen](https://thenewstack.io/bluefin-a-next-gen-linux-workstation-for-containerized-apps/)
+
 Bluefin is:
 
 - **Flatpak First** - The application model in Bluefin is centered around isolated apps that are maintained in Flathub. Applications that do not work well with modern components such as Wayland, Pipewire, Flatpak Portals, etc. may provide a poor experience and are not recommended.
@@ -24,21 +29,22 @@ Bluefin is:
 
 If your requirements are outside of this scope, then **Bluefin might not be the best fit for you**. We recognize that in order to make a better desktop that many parts of the traditional Linux desktop experience will not be coming with us. [Here's a video](https://www.youtube.com/watch?v=4CyWH6jx2pE) on why we take such a focused approach to the desktop. The video is about [Bazzite.gg](https://bazzite.gg), which is a sister project, but the same applies.
 
-:::note[Begin your journey...]
+:::info[Begin your journey...]
 
 If this appeals to you, then Bluefin is for you!
 
 - [Introduction to Bluefin](https://docs.projectbluefin.io/introduction) - to check out the features and installation instructions.
-- [Introductory blog post](https://www.ypsidanger.com/announcing-project-bluefin/) for more background information.
 
 :::
 
-> "Evolution is a process of constant branching and expansion."
->
-> - Stephen Jay Gould
+The [announcement blog post](https://www.ypsidanger.com/announcing-project-bluefin/) also has some extra background information.
 
 ## Introductory Videos and Podcasts
 
 Check out our [list of videos and reviews](https://universal-blue.discourse.group/tags/c/bluefin/6/videos-and-podcasts) for more information.
+
+> "Evolution is a process of constant branching and expansion."
+>
+> - Stephen Jay Gould
 
 <img referrerpolicy="no-referrer-when-downgrade" src="https://static.scarf.sh/a.png?x-pxid=f9b34ca2-b9c5-4075-8f0e-1f140c8bd16f" />

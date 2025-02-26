@@ -3,17 +3,58 @@ title: AI and Machine Learning
 slug: /ai
 ---
 
-# AI and Machine Learning
+Bluefin's [developer experience](/bluefin-dx) fully supports local AI development workflows. GPU Acceleration for both Nvidia and AMD are included out of the box and usually do not require any extra setup. 
 
-GPU Acceleration for both Nvidia and AMD are included out of the box and usually do not require any extra setup.
+:::tip[AI is an extension to cloud native]
 
-### Ollama GUI
+Bluefin's focus in AI is providing a generic API endpoint to the operating system that is controlled by the user. Similar to how Bluefin ships `podman`, we feel that `ramalama` and other great open source tools can be used for many useful purposes.
 
-[Install Alpaca](https://flathub.org/apps/com.jeffser.Alpaca) to manage and chat with your LLM models from within a native desktop application. Alpaca supports Nvidia and AMD acceleration natively and _includes ollama_.
+:::
+
+
+## AI Lab with Podman Desktop
+
+The [AI Lab extension](https://developers.redhat.com/products/podman-desktop/podman-ai-lab) can be installed inside the included Podman Desktop to provide a graphical interface for managing local models:
+
+![image](https://github.com/user-attachments/assets/e5557952-3e62-499e-93a9-934c4d452be0)
+
+## Ramalama
+
+[Ramalama](https://github.com/containers/ramalama) is included to manage local models and is the prefered default experience. It's for people who work with local models frequently and need advanced features. It offers the ability to pull models from huggingface, ollama, and any container registry. By default it pulls from ollama.com, check the [Ramalama documentation](https://github.com/containers/ramalama/tree/main/docs) for more information. 
+
+Ramalama's command line experience is similar to Podman, examples include:
+
+```
+ramalama pull llama3.2:latest
+ramalama run llama3.2  
+ramalama run deepseek-r1
+```
+
+You can also serve the models locally: 
+
+```
+ramalama serve deepseek-r1
+```
+
+Then go to `http://127.0.0.0:8080` in your browser. 
+
+Ramalama will automatically pull in anything your host needs to do the workload. The images are also stored in the same container storage as your other containers. This allows for centralized management of the ai models and other podman images:  
+
+```
+❯ podman images
+REPOSITORY                                 TAG         IMAGE ID      CREATED        SIZE
+quay.io/ramalama/rocm                      latest      8875feffdb87  5 days ago     6.92 GB
+```
+
+## Alpaca Graphical Client
+
+For light chatbot usage we recommend that users [install Alpaca](https://flathub.org/apps/com.jeffser.Alpaca) to manage and chat with your LLM models from within a native desktop application. Alpaca supports Nvidia and AMD[^1] acceleration natively and _includes ollama_.
 
 ![image](https://github.com/user-attachments/assets/9fd38164-e2a9-4da1-9bcd-29e0e7add071)
 
-### Ollama API
+[^1]: For proper AMD support, the Flatpak extension `com.jeffser.Alpaca.Plugins.AMD` must also be installed.
+
+## Running Ollama as a Service
 
 Since Alpaca doesn't expose any API, if you need other applications than Alpaca to interact with your ollama instance (for example an IDE) you should consider installing it in a [container](https://hub.docker.com/r/ollama/ollama).
 

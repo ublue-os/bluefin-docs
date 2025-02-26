@@ -19,8 +19,10 @@ This usually means you can set it up your system once, and then have it remain t
 
 ### Graphical Applications
 
-Use the GNOME Software Center to [install applications from Flathub](https://flathub.org/). System updates and upgrades are not handled by this application, it's scope has been reduced to only install Flatpaks from Flathub.
-The [Warehouse](https://flathub.org/apps/io.github.flattool.Warehouse) tool is included for management.
+Use the GNOME Software Center to [install applications from Flathub](https://flathub.org/). System updates and upgrades are not handled by this application, it's scope has been reduced to only install Flatpaks from Flathub. Two flatpak management tools are included:
+
+- [Warehouse](https://flathub.org/apps/io.github.flattool.Warehouse) provides application management.
+- [Flatseal](https://flathub.org/apps/com.github.tchx84.Flatseal) is also included for permission management.
 
 ![GNOME Software Center - App Illustration](https://github.com/user-attachments/assets/65b6cae5-9ed4-4d28-93b4-b6dfe9adf463)
 
@@ -224,7 +226,7 @@ Local layering does significantly increase update time, but by default all Bluef
 
 ## Overwriting System Defaults
 
-Most Bluefin and Aurora system defaults are shipped on the base image along with Fedora configuration in `/usr/etc`. Most of these can be overridden by placing a file in `/etc`.
+Bluefin system defaults are shipped on the base image along with Fedora configuration in `/usr/etc`. Most of these can be overridden by placing a file in `/etc`.
 
 For example, the Distrobox configuration is in `/usr/etc/distrobox/distrobox.ini`. Your customization options will be placed in `/etc/distrobox/distrobox.ini`. This is useful for situations where you need a copy of the original file for reference.
 

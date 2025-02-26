@@ -2,6 +2,7 @@
 title: Introduction to Bluefin
 slug: /introduction
 ---
+*Deinonychus antirrhopus*
 
 ![image](https://github.com/user-attachments/assets/21208dd6-9ce5-41ba-9c21-d2bb97f7c1e8)
 
@@ -11,7 +12,7 @@ slug: /introduction
 
 ## Features
 
-System updates are image-based and automatic. Applications are logically separated from the system by using Flatpaks for graphical applications and `brew` for command line applications.
+Bluefin features a GNOME desktop configured by our community. System updates are image-based and automatic. Applications are logically separated from the system by using Flatpaks for graphical applications and `brew` for command line applications. It is designed to be hands off and to stay out of your way. 
 
 > Bluefin is also "An interpretation of the Ubuntu spirit built on Fedora technology", which is a certain era of Ubuntu's history that a significant amount of open source people grew up with, like the Classic X-men. We try to bring that vibe here, we're the reboot. Chill vibes.
 
@@ -23,7 +24,7 @@ System updates are image-based and automatic. Applications are logically separat
     - [Blur my Shell](https://github.com/aunetx/blur-my-shell) - for that bling
     - [Tailscale GNOME QS](https://extensions.gnome.org/extension/6139/tailscale-qs/) for [tailscale integration](https://universal-blue.discourse.group/t/tailscale-vpn/290)
     - [Search Light](https://github.com/icedman/search-light) - for search and a MacOS Spotlight workflow. Bound to <kbd>Super</kbd>-<kbd>Space</kbd> by default
-- [Developer Mode](bluefin-dx) - Dedicated developer mode that transforms Bluefin into a powerful cloud native developer workstation.
+- [Developer Mode](/bluefin-dx) - Dedicated developer mode that transforms Bluefin into a powerful cloud native developer workstation.
 - [Ptyxis terminal](https://devsuite.app/ptyxis/) for container-focused workflows
   - [Boxbuddy](https://flathub.org/apps/io.github.dvlv.boxbuddyrs) for container management
 - [Tailscale](https://tailscale.com) - included for VPN along with `wireguard-tools`
@@ -47,12 +48,6 @@ System updates are image-based and automatic. Applications are logically separat
     - If you've never used an image-based Linux before just use your computer normally
     - Don't overthink it, just shut your computer off when you're not using it
 
-## Applications
-
-- Mozilla Firefox, Mozilla Thunderbird, Extension Manager, DejaDup, FontDownloader, Flatseal, and the Clapper Media Player.
-- Core GNOME Applications installed from Flathub:
-  - GNOME Calculator, Calendar, Characters, Connections, Contacts, Evince, Firmware, Logs, Maps, NautilusPreviewer, TextEditor, Weather, baobab, clocks, eog, and font-viewer.
-
 ## Installation Requirements
 
 Review the [Fedora Silverblue installation instructions](https://docs.fedoraproject.org/en-US/fedora-silverblue/installation/). Some points to consider:
@@ -64,11 +59,9 @@ Review the [Fedora Silverblue installation instructions](https://docs.fedoraproj
 - A stock Bluefin installation is 11GB. Bluefin with developer mode enabled (`bluefin-dx`) is 19GB.
 - Read the installation runbook below to ensure your device and use case are supported by Bluefin!
 
-In order to set yourself up to success it's useful to plan out your Bluefin installation into three distinct phases, mirroring the systems operations lifecycle.
-
 ## Installation Runbook
 
-Here is a short [runbook](https://www.pagerduty.com/resources/learn/what-is-a-runbook/) for the Bluefin installation process. Read the entirety of this documentation in order to ensure survival. (In case of a raptor attack).
+In order to set yourself up to success it's useful to plan out your Bluefin installation into three distinct phases, mirroring the systems operations lifecycle. Here is a short [runbook](https://www.pagerduty.com/resources/learn/what-is-a-runbook/) for the Bluefin installation process. Read the entirety of this documentation in order to ensure survival. (In case of a raptor attack).
 
 ### Day 0: Planning
 
@@ -89,6 +82,8 @@ Most pain points can be addressed directly by planning ahead of time.
   - Is your printer/scanner well supported in Linux?
     - [Driverless printers](https://openprinting.github.io/printers/) are strongly recommended, we cannot guarantee every printer will work
     - [Scanner support](http://www.sane-project.org/sane-mfgs.html)
+- Is the BIOS/UEFI up to date on the device?
+    - We recommend having all hardware firmware updates completed and up to date before installation
 - Are the applications you depend on well supported on Flathub?
 - Does your VPN provider provide a wireguard configuration to import into Network Manager?
 - Dedicated disk ready to go?
@@ -186,5 +181,3 @@ You can use `mokutil --list-enrolled` to confirm that the "ublue kernel" key is 
 :::note
 If you see `ublue akmods\` listed, it is a former key that is soon to be removed. `ublue kernel` is the current key.
 :::
-
-[Move on to system administration](administration)
