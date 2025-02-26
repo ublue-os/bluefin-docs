@@ -70,8 +70,8 @@ Image=ollama/ollama:latest
 ContainerName=ollama
 AutoUpdate=yes
 PublishPort=11434:11434
-Volume=./ollama_v:/root/.ollama:z
-Device=/dev/nvidia*:ro
+Volume=ollama:/root/.ollama:z
+AddDevice=nvidia.com/gpu=all
 Deploy=resources.reservations.devices.capabilities=gpu
 
 [Service]
@@ -98,38 +98,6 @@ WantedBy=multi-user.target
 # download and run model https://ollama.com/search
 ❯ ollama run <model>
 ```
-
-
-#### Podman Compose
-> **NOTE:** Podman needs to be run with sudo for nvidia gpu passthrough until [this](https://github.com/containers/podman/issues/19338) issue is fixed.
-> 
-Create this `podman-compose.yaml file
-
-```yaml
----
-services:
-  ollama:
-    image: ollama/ollama
-    container_name: ollama
-    restart: unless-stopped
-    ports:
-      - 11434:11434
-    volumes:
-      - ./ollama_v:/root/.ollama:z
-    devices:
-      - nvidia.com/gpu=all
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities:
-                - gpu
-
-```
-
-`❯ sudo podman-compose up -d`
-
-
 
 #### Docker Compose
 
