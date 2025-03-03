@@ -5,10 +5,6 @@ slug: /FAQ
 
 The [general FAQ](https://projectbluefin.io/#scene-faq) on the website covers some of the most common questions. This section containers more specific questions:
 
-## What about codecs?
-
-Everything you need is included.
-
 ## How is this different from Fedora Silverblue?
 
 Other than the visual differences, and codecs, there are some other key differences between Bluefin and Fedora Silverblue from a usage perspective:
@@ -18,7 +14,21 @@ Other than the visual differences, and codecs, there are some other key differen
 - Bluefin _tries_ to remove the need for the user to use `rpm-ostree` or `bootc` directly
 - Bluefin focuses on automation of OS services and upgrades instead of user interaction
 
-## Who is this for?
+## Am I holding Bluefin wrong?
+
+![Don't hold Bluefin wrong](https://github.com/user-attachments/assets/6d03851b-5d42-4235-9e1c-3dde7c455946)
+
+You can always do what you want, but Bluefin is designed with a certain workflow in mind. Here are some guidelines from the raptor experts:
+
+- Containerize your developer environments rather than commingle them with the OS. You can define them per project in a `devcontainers.json` file managed by Git.
+- Stick to flatpaks and homebrew. The ideal is to leave the core OS image unchanged. Layering packages creates a maintenance burden that may be unnecessary to take on.
+- Follow the XDG standards for overriding core OS files. The `/etc`, `/var`, `/usr/local`, and `/opt` directories are writable, and many applications will look here for overrides of the read-only files shipped with the OS image in `/usr`. Add to this your home directory, which contains the `~/.local` and `~/.config` subdirectories, which often allow per-user overrides of system defaults. When you’re [using your UNIX system correctly](https://www.youtube.com/watch?v=JOeY07qKU9c), the read-only part is invisible!
+- Isolate the old-school jank in a container. Mangling packages on your host is for those throwback [paleoosaurs](https://en.wikipedia.org/wiki/Palaeosaurus) among us; you know the type.
+- Don’t overthink rebooting. Just turn off your PC when you’re not using it, and let the OS updates happen automatically, as they will.
+- Bluefin performs best on Linux friendly hardware like the Framework series of laptops. Check hardware compatibility before making the commitment.
+- Keep Bluefin’s ecosystem healthy by donating to application developers. 
+
+## So who is this for?
 
 We **strongly** believe that new users to Linux should be introduced by via atomic image and not the traditional desktop. It is clear to us that this is a generational shift. We're purposely here to help existing users bury the past and move on to something more useful than wrestling with their operating system.
 
@@ -45,6 +55,10 @@ Bluefin users continually use the Arch wiki for just about everything anyway, ju
 ### My friends make fun of me because they think this is a fad or a toy like a chromebook, what do I tell them?
 
 They probably make fun of terms like "cloud native" too! Universal Blue images like Bluefin are designed by infrastructure experts who have decades of combined Linux experience. We are purposely funneling the expertise of world-leading experts in Linux, open source, and the things that the modern world _depend on_. By catering to this audience we know we can help make _fundamental improvements_ to the Linux desktop by bringing in experts who can help with the pipeline.
+
+## What about codecs?
+
+Everything you need is included.
 
 ## What's the deal with homebrew?
 
