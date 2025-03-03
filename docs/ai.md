@@ -59,7 +59,7 @@ For light chatbot usage we recommend that users [install Alpaca](https://flathub
 Since Alpaca doesn't expose any API, if you need other applications than Alpaca to interact with your ollama instance (for example an IDE) you should consider installing it in a [container](https://hub.docker.com/r/ollama/ollama).
 
 ### Quadlet (recommended)
-https://docs.bazzite.gg/Installing_and_Managing_Software/Quadlet/
+[Bazzite Quadlet Docs](https://docs.bazzite.gg/Installing_and_Managing_Software/Quadlet/)  
 `~/.config/containers/systemd/ollama.container`
 ```
 [Unit]
