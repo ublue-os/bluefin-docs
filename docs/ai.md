@@ -58,8 +58,9 @@ For light chatbot usage we recommend that users [install Alpaca](https://flathub
 
 Since Alpaca doesn't expose any API, if you need other applications than Alpaca to interact with your ollama instance (for example an IDE) you should consider installing it in a [container](https://hub.docker.com/r/ollama/ollama).
 
-#### Quadlet (recommended)
-`~/.local/share/systemd/ollama.container`
+### Quadlet (recommended)
+https://docs.bazzite.gg/Installing_and_Managing_Software/Quadlet/
+`~/.config/containers/systemd/ollama.container`
 ```
 [Unit]
 Description=Ollama Service
@@ -70,13 +71,30 @@ Image=ollama/ollama:latest
 ContainerName=ollama
 AutoUpdate=yes
 PublishPort=11434:11434
-Volume=ollama:/root/.ollama:z
+Volume=%h/.ollama:/.ollama
+RemapUsers=keep-id
+RunInit=yes
+NoNewPrivileges=no
+PodmanArgs=--userns=keep-id
+PodmanArgs=--group-add=keep-groups
+PodmanArgs=--ulimit=host
+PodmanArgs=--security-opt=label=disable
+PodmanArgs=--cgroupns=host
+
+# Nvidia
 AddDevice=nvidia.com/gpu=all
-Deploy=resources.reservations.devices.capabilities=gpu
+
+# AMD
+AddDevice=/dev/dri
+AddDevice=/dev/kfd
 
 [Service]
 RestartUnlessStopped=yes
 TimeoutStartSec=60s
+# Ensure there's a userland podman.sock
+ExecStartPre=/bin/systemctl --user enable podman.socket
+# Ensure that the dir exists
+ExecStartPre=-mkdir -p %h/.ollama
 
 [Install]
 WantedBy=multi-user.target
@@ -99,7 +117,7 @@ WantedBy=multi-user.target
 ❯ ollama run <model>
 ```
 
-#### Docker Compose
+### Docker Compose
 
 To do so, first configure docker to use the nvidia drivers (that come preinstalled with Bluefin).
 
