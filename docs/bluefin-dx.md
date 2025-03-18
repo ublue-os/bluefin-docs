@@ -185,3 +185,9 @@ DevPod also has support for JetBrains:
 - [virt-manager](https://virt-manager.org/) and associated tooling (KVM, qemu)
 - [Incus](https://linuxcontainers.org/incus/) provides system containers
   - [LXC](https://linuxcontainers.org/) and [LXD](https://ubuntu.com/lxd) are also provided for compatibility reasons, however, these tools are deprecated and will be removed in Spring 2025
+  - 
+
+# Rebasing from Fedora Silverblue / Kinoite (unsupported, not recommended)
+
+- `rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-dx:latest`
+- and then `rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/bluefin-dx:latest` after a reboot.
