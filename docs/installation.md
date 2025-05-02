@@ -2,6 +2,7 @@
 title: Installation
 slug: /installation
 ---
+
 # Installation Runbook
 
 In order to set yourself up to success it's useful to plan out your Bluefin installation into phases so that you can avoid common pitfalls and poorly supported configurations. On Linux-friendly hardware usually just booting into the installation process and clicking through the recommended installer defaults is enough.
@@ -18,7 +19,7 @@ This runbook is for experienced users who are installing Bluefin for someone els
 
 Here is a short [runbook](https://www.pagerduty.com/resources/learn/what-is-a-runbook/) for the Bluefin installation process. Read the entirety of this documentation in order to ensure survival. (In case of a raptor attack).
 
-### Requirements
+## Requirements
 
 Review the [Fedora Silverblue installation instructions](https://docs.fedoraproject.org/en-US/fedora-silverblue/installation/). Some differences to consider:
 
@@ -27,6 +28,54 @@ Review the [Fedora Silverblue installation instructions](https://docs.fedoraproj
   - Bluefin supports a [installation on an external drive](/tips/#bluefin-to-go-using-an-external-drive) if you want to try it on bare metal before committing.
 - We **strongly recommend** using automated partitioning during installation, there are [known issues](https://docs.fedoraproject.org/en-US/fedora-silverblue/installation/) with manual partition on Atomic systems and is unnecessary to set up unless you are on a multi-disk system.
 - A stock Bluefin installation is 11GB. Bluefin with developer mode enabled (`bluefin-dx`) is 19GB.
+
+## ISO Downloads
+
+**Don't know what you need?**
+
+- Go to [the website](https://projectbluefin.io)
+- Press 'Try Out'
+    - Fill in the form
+- Download the ISO!
+
+**Already know what you want?**
+
+:::warning[These are not ready]
+
+These ISOs are experimental, please [report issues](https://github.com/ublue-os/titanoboa/issues) if you want to help!
+
+:::
+
+### AMD/Intel
+
+- Bluefin: [bluefin-live-stable-amd64.iso](https://download.projectbluefin.io/bluefin-live-stable-amd64.iso)
+- Bluefin GTS: [bluefin-live-gts-amd64.iso](https://download.projectbluefin.io/bluefin-live-gts-amd64.iso)
+- Bluefin LTS (Beta): [bluefin-lts.iso](https://download.projectbluefin.io/bluefin-lts.iso)
+
+### Nvidia
+
+- Bluefin: [bluefin-live-nvidia-open-stable-amd64.iso](https://download.projectbluefin.io/bluefin-live-nvidia-open-stable-amd64.iso)
+- Bluefin GTS: [bluefin-live-nvidia-open-gts-amd64.iso](https://download.projectbluefin.io/bluefin-live-nvidia-open-gts-amd64.iso)
+- Bluefin GDX (Beta) : [bluefin-gdx-lts.iso](https://download.projectbluefin.io/bluefin-gdx-lts.iso)
+
+### ARM (aarch64)
+
+- Bluefin LTS (Beta): [bluefin-lts-arm64.iso](https://download.projectbluefin.io/bluefin-lts-arm64.iso)
+- Bluefin GDX (Beta): [bluefin-gdx-lts-arm64.iso](https://download.projectbluefin.io/bluefin-gdx-lts-arm64.iso)
+
+### Torrents
+
+Torrents are graciously provided by fosstorrents.com:
+
+#### [fosstorrents.com/distributions/project-bluefin/](https://fosstorrents.com/distributions/project-bluefin/)
+
+### Older Backup ISOs
+
+These are the older Anaconda-based installers with an older version of Bluefin, but don't worry it will autoupdate. Try this if nothing else works:
+
+- Bluefin (AMD/Intel): [bluefin-stable.iso](https://projectbluefin.dev/bluefin-stable.iso) - [Checksum](https://projectbluefin.dev/bluefin-stable.iso-CHECKSUM)
+- Bluefin (for Nvidia):  [bluefin-stable-nvidia.iso](https://projectbluefin.dev/bluefin-nvidia-stable.iso) - [Checksum](https://projectbluefin.dev/bluefin-nvidia-stable.iso-CHECKSUM)
+
 
 ## Day 0: Planning
 
