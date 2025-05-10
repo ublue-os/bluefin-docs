@@ -58,9 +58,70 @@ The user is prompted to [install ollama separately](https://github.com/Jeffser/A
 
 ## Running Ollama as a Service
 
-Ollama can also be used for people who prefer to use that tool. If you want third party tools to integrate with it, (for example an IDE) you should consider installing it [in a docker container](https://hub.docker.com/r/ollama/ollama).
+Since Alpaca doesn't expose any API, if you need other applications than Alpaca to interact with your ollama instance (for example an IDE) you should consider installing it in a [container](https://hub.docker.com/r/ollama/ollama).
 
-To do so, first configure docker to use the nvidia drivers (that come preinstalled with Bluefin) with:
+### Quadlet (recommended)
+[Bazzite Quadlet Docs](https://docs.bazzite.gg/Installing_and_Managing_Software/Quadlet/)  
+`~/.config/containers/systemd/ollama.container`
+```
+[Unit]
+Description=Ollama Service
+After=network.target local-fs.target
+
+[Container]
+Image=ollama/ollama:latest
+ContainerName=ollama
+AutoUpdate=yes
+PublishPort=11434:11434
+Volume=%h/.ollama:/.ollama
+RemapUsers=keep-id
+RunInit=yes
+NoNewPrivileges=no
+PodmanArgs=--userns=keep-id
+PodmanArgs=--group-add=keep-groups
+PodmanArgs=--ulimit=host
+PodmanArgs=--security-opt=label=disable
+PodmanArgs=--cgroupns=host
+
+# Nvidia
+AddDevice=nvidia.com/gpu=all
+
+# AMD
+AddDevice=/dev/dri
+AddDevice=/dev/kfd
+
+[Service]
+RestartUnlessStopped=yes
+TimeoutStartSec=60s
+# Ensure there's a userland podman.sock
+ExecStartPre=/bin/systemctl --user enable podman.socket
+# Ensure that the dir exists
+ExecStartPre=-mkdir -p %h/.ollama
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```sh
+❯ systemctl --user daemon-reload
+
+# start Ollama podlet for current session
+❯ systemctl --user start ollama
+❯ systemctl --user status ollama
+
+# start Ollama podlet automatically after reboot
+❯ systemctl --user enable ollama
+
+# connect to ollama
+❯ ollama list
+
+# download and run model https://ollama.com/search
+❯ ollama run <model>
+```
+
+### Docker Compose
+
+To do so, first configure docker to use the nvidia drivers (that come preinstalled with Bluefin).
 
 ```bash
 sudo nvidia-ctk runtime configure --runtime=docker
@@ -87,6 +148,7 @@ services:
             - capabilities:
                 - gpu
 ```
+
 
 Finally, open a terminal in the folder containing the file just created and start the container with
 
