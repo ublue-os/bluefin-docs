@@ -3,8 +3,6 @@ title: Gaming
 slug: /gaming
 ---
 
-Bluefin offers gaming tools [from Flathub](https://flathub.org/) to provide a gaming experience.
-
 :::info[Is this any good for gamers?]
 
 Most of the gaming experience depends on: An updated Linux kernel, updated MESA libraries, and updated firmware and other hardware enablement. Nvidia users need those drivers as well. All Universal Blue images deliver these critical components on a regular basis and are suitable for gaming. When those components are in place the performance in gaming tends to not differ much between other images and Linux distributions. It's all Linux. 
@@ -13,7 +11,9 @@ Most of the gaming experience depends on: An updated Linux kernel, updated MESA 
 
 Note that this experience is for general use case gaming and doesn't cover Virtual Reality headsets and other deep gaming customization.[Consider using Bazzite](https://bazzite.gg) instead. It features a more aggressive kernel update cadence than Bluefin for people who want to live on the leading edge.
 
-## Installation
+### Installation
+
+Bluefin offers gaming tools [from Flathub](https://flathub.org/) to provide a gaming experience.
 
 Run `ujust install-gaming-flatpaks`. 
 
@@ -59,7 +59,7 @@ This is an [OBS Studios](https://obsproject.com/) plugin that allows you to dire
 
 ### Mangohud
 
-A Vulkan and OpenGL overlay for monitoring FPS, temperatures, CPU/GPU load and more. To enable it, add `mangohud %command%` to your launch option or alternatively add `MANGOHUD=1` to your shell profile (Vulkan only)
+Mangohud is Vulkan and OpenGL overlay for monitoring FPS, temperatures, CPU/GPU load and more. To enable it, add `mangohud %command%` to your launch option or alternatively add `MANGOHUD=1` to your shell profile (Vulkan only)
 
 *Note: You need to add the following command so that Steam games can access Mangohud:*
 
@@ -86,4 +86,6 @@ runtime/org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/24.08
 runtime/org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/23.08 
 runtime/com.valvesoftware.Steam.Utility.steamtinkerlaunch/x86_64/stable
 ```
+
+
 
