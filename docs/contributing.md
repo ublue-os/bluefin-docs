@@ -277,6 +277,15 @@ test: ensure Tayne retains clothing
 - Submit pull requests to [ublue-os/bluefin-docs](https://github.com/ublue-os/bluefin-docs)
 - Avoid the usage of terms likes "simply" or "easy", see [justsimply.dev](https://justsimply.dev/) for more information.
 
+### Internationalization (i18n)
+
+We welcome contributions to translate the documentation into other languages. See our [Internationalization Guide](/contributing-i18n) for detailed instructions on:
+
+- Adding new languages
+- Translating UI elements
+- Translating documentation pages
+- Best practices for maintaining translations
+
 ## Pinning a package version
 
 In some cases there might be a regression in upstream Fedora that needs a fix. Packages can be "pinned" to a certain version, and can be added to the main Containerfiles similar to this snippet.

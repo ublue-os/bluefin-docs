@@ -28,7 +28,7 @@ const config: Config = {
 
   i18n: {
     defaultLocale: "en",
-    locales: ["en"],
+    locales: ["en", "es"],
   },
 
   presets: [
@@ -126,6 +126,10 @@ const config: Config = {
         {
           href: "https://github.com/ublue-os/bluefin",
           label: "GitHub",
+          position: "right",
+        },
+        {
+          type: "localeDropdown",
           position: "right",
         },
       ],

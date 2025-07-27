@@ -1,0 +1,30 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.baseSidebar.category.Documentation": {
+    "message": "Documentation",
+    "description": "The label for category Documentation in sidebar baseSidebar"
+  },
+  "sidebar.baseSidebar.category.Project Information": {
+    "message": "Project Information",
+    "description": "The label for category Project Information in sidebar baseSidebar"
+  },
+  "sidebar.baseSidebar.category.Bluefin LTS": {
+    "message": "Bluefin LTS",
+    "description": "The label for category Bluefin LTS in sidebar baseSidebar"
+  },
+  "sidebar.baseSidebar.category.Contributing": {
+    "message": "Contributing",
+    "description": "The label for category Contributing in sidebar baseSidebar"
+  },
+  "sidebar.baseSidebar.category.Framework Laptops": {
+    "message": "Framework Laptops",
+    "description": "The label for category Framework Laptops in sidebar baseSidebar"
+  },
+  "sidebar.baseSidebar.category.Other Hardware": {
+    "message": "Other Hardware",
+    "description": "The label for category Other Hardware in sidebar baseSidebar"
+  }
+}
