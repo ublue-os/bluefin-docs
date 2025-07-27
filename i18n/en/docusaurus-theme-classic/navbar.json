@@ -1,0 +1,38 @@
+{
+  "title": {
+    "message": "Bluefin",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "Bluefin",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Documentation": {
+    "message": "Documentation",
+    "description": "Navbar item with label Documentation"
+  },
+  "item.label.Ask Bluefin": {
+    "message": "Ask Bluefin",
+    "description": "Navbar item with label Ask Bluefin"
+  },
+  "item.label.Blog": {
+    "message": "Blog",
+    "description": "Navbar item with label Blog"
+  },
+  "item.label.Web": {
+    "message": "Web",
+    "description": "Navbar item with label Web"
+  },
+  "item.label.Community": {
+    "message": "Community",
+    "description": "Navbar item with label Community"
+  },
+  "item.label.Feedback": {
+    "message": "Feedback",
+    "description": "Navbar item with label Feedback"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}
