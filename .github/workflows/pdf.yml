@@ -12,6 +12,47 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
+      - name: Check latest pages workflow status
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          echo "Checking latest pages workflow status before PDF generation..."
+
+          # Get the latest workflow run for pages.yml on main branch
+          LATEST_RUN=$(gh api repos/${{ github.repository }}/actions/workflows/pages.yml/runs \
+            --jq '.workflow_runs | map(select(.head_branch == "main")) | first')
+
+          # Check if we found any workflow runs
+          if [ "$LATEST_RUN" = "null" ] || [ -z "$LATEST_RUN" ]; then
+            echo "❌ No pages workflow runs found for main branch."
+            echo "Skipping PDF generation as we cannot verify main build status."
+            exit 1
+          fi
+
+          STATUS=$(echo "$LATEST_RUN" | jq -r '.status')
+          CONCLUSION=$(echo "$LATEST_RUN" | jq -r '.conclusion')
+          RUN_URL=$(echo "$LATEST_RUN" | jq -r '.html_url')
+          CREATED_AT=$(echo "$LATEST_RUN" | jq -r '.created_at')
+
+          echo "Latest pages workflow details:"
+          echo "  Created: $CREATED_AT"
+          echo "  Status: $STATUS"
+          echo "  Conclusion: $CONCLUSION" 
+          echo "  URL: $RUN_URL"
+
+          # Check if the workflow completed successfully
+          if [ "$STATUS" != "completed" ] || [ "$CONCLUSION" != "success" ]; then
+            echo ""
+            echo "❌ Latest pages workflow did not complete successfully."
+            echo "Status: $STATUS, Conclusion: $CONCLUSION"
+            echo "Skipping PDF generation to avoid building from outdated docs."
+            echo "Check the pages workflow at: $RUN_URL"
+            exit 1
+          fi
+
+          echo ""
+          echo "✅ Latest pages workflow completed successfully. Proceeding with PDF generation."
+
       - name: Install Prince
         run: |
           curl https://www.princexml.com/download/prince-15.4.1-linux-generic-x86_64.tar.gz -O
