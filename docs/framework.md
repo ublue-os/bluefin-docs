@@ -7,11 +7,7 @@ slug: /framework
 
 Fedora is an officially supported option for the [Framework](https://frame.work) laptops. Due to it's cloud native nature, [Universal Blue](https://universal-blue.org/) images inherit the hardware support, which include Bluefin. Universal Blue partners with Framework to provide community support for these laptops by building on Fedora's support and extending it. The co-creators of Bluefin use Framework laptops as their laptops and it is the recommended "perfect setup".
 
-![83a08fa741add9e31b4762bf601337e4b506db8d](https://github.com/user-attachments/assets/3dd48f0f-f839-47ca-96f3-8e230e11e47e)
-
 Bluefin and it's sister images [Aurora](https://getaurora.dev), and [Bazzite](https://bazzite.gg) are community supported options on Framework hardware.
-
-![e7f719d97dee2083907dda5d06171608f6384bea](https://github.com/user-attachments/assets/3091108c-3228-400c-883d-16d6b734b47d)
 
 - [frame.work/linux](https://frame.work/linux)
 
