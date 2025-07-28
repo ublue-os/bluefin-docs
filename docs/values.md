@@ -11,7 +11,7 @@ Distributed asynchronous ownership, collaboration, communication and decision ma
 
 ## Automation over process
 
-The project values time spent automating repetitive work more highly than toil.
+Bluefin values time spent automating repetitive work more highly than toil.
 
 ## Inclusive is better than exclusive
 
@@ -23,11 +23,11 @@ Openness to new ideas and studied technological evolution make us a stronger pro
 
 ## Transparency
 
-The project endeavors to utilize the latest in open-source technology (like [sigstore](https://www.sigstore.dev/)) to ensure users can verify the processes used to build these images. The project strives to educate users by sharing as much data as possible.
+Bluefin endeavors to utilize the latest in open-source technology (like [sigstore](https://www.sigstore.dev/)) to ensure users can verify the processes used to build these images. Bluefin strives to educate users by sharing as much data as possible.
 
 ## Bias for Action
 
-The project strives to prefer stability and correctness, but recognizes that it must act to solve problems quickly and efficiently.
+Bluefin strives to prefer stability and correctness, but recognizes that it must act to solve problems quickly and efficiently.
 
 > "Culture eats strategy for breakfast."
 >

@@ -61,7 +61,7 @@ While our payload is less churny than Fedora, note that this is still a new imag
 
 ### Status
 
-- There are instances when something from Bluefin is not implemented in Bluefin LTS. Please [file an issue](https://github.com/ublue-os/bluefin-lts/issues) and tag it with `parity` and the team will investigate. They'll never _exactly_ but we can get the important ones done
+- There are instances when something from Bluefin is not implemented in Bluefin LTS. Please [file an issue](https://github.com/ublue-os/bluefin-lts/issues) and tag it with `parity` and we will investigate. They'll never be _exactly_ the same but we can get the important ones done
 - Appimages are hard unsupported (those fuse packages aren't even in CentOS)
 - Local Layering is disabled by default
 
@@ -123,7 +123,7 @@ If there are other ways to set this up on MacOS please considering sending a pul
 #### Other features
 
 - Rebasing: We will explicitly not support rebasing from the Fedora based images and ensure the rebase helper keeps users protected.
-- Releases: Builds publish weekly on Tuesdays, the images will update as often as the team is developing and will settle down into weeklies as the project matures
+- Releases: Builds publish weekly on Tuesdays, the images will update as often as we are developing and will settle down into weeklies as Bluefin LTS matures
 
 #### Schedule
 
@@ -150,6 +150,6 @@ Note that secureboot and hibernation are mutually exclusive. We do not yet offer
 
 ## Supporting Bluefin LTS
 
-The team appreciates your support!
+We appreciate your support!
 
 - <a class="github-button" href="https://github.com/sponsors/tulilirockz" data-color-scheme="no-preference: light; light: light; dark: dark;" data-icon="octicon-heart" data-size="large" aria-label="Sponsor tulilirockz">Sponsor</a> [Tulip Blossom](https://github.com/tulilirockz)- Lead Raptor Wrangler

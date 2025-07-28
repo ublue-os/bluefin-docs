@@ -5,7 +5,7 @@ authors: castrojo
 tags: [announcements]
 ---
 
-Hey ya’ll, we’re about to head into conference season so I thought I’d do a quick rollup for you before the team starts on F42 work.
+Hey ya’ll, we’re about to head into conference season so I thought I’d do a quick rollup for you before we start on F42 work.
 
 Most of these things are infrastructure and project related and won’t have a visible impact on your desktop or OS. Don’t worry we have other exciting things for that coming down the pipeline! For you Aurora fans we’re just going to leave a teaser for you:
 

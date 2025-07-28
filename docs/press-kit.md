@@ -5,7 +5,7 @@ slug: /press-kit
 
 # Press Kit
 
-Thanks for generating content about Bluefin and Universal Blue! This document will explain how to use the brand and terminology used by the project.
+Thanks for generating content about Bluefin and Universal Blue! This document will explain how to use the brand and terminology used by Bluefin.
 
 - [Bluefin](https://projectbluefin.io)
 - [Universal Blue](https://universal-blue.org)
@@ -13,11 +13,11 @@ Thanks for generating content about Bluefin and Universal Blue! This document wi
 
 # Bluefin Terminology
 
-The name of the project is `Project Bluefin` but usually shortened to just `Bluefin`. It is built with [Universal Blue](https://universal-blue.org), which publishes base images that Bluefin uses. These in turn are derived from Fedora's Silverblue images. Universal Blue is the parent organization of [Bluefin](https://projectbluefin.io), [Bazzite](https://bazzite.gg), [Aurora](https://getaurora.dev), and [uCore](https://github.com/ublue-os/ucore). It also acts as the GitHub organization.
+The name is `Project Bluefin` but usually shortened to just `Bluefin`. It is built with [Universal Blue](https://universal-blue.org), which publishes base images that Bluefin uses. These in turn are derived from Fedora's Silverblue images. Universal Blue is the parent organization of [Bluefin](https://projectbluefin.io), [Bazzite](https://bazzite.gg), [Aurora](https://getaurora.dev), and [uCore](https://github.com/ublue-os/ucore). It also acts as the GitHub organization.
 
 ## Proper Usage
 
-- `Bluefin` - used to refer to the project and/or the operating system
+- `Bluefin` - used to refer to Bluefin and/or the operating system
 - `Bluefin GTS` - used to refer to the GTS version of Bluefin specifically. This is the default experience
 - `Bluefin DX` - Bluefin with developer mode turned on, relevant when discussing developer-specific features
 - `Bluefin GDX` - Bluefin with developer mode turned on, and Nvidia specific tooling like CUDA. Relevant when discussing AI-specific features

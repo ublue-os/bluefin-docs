@@ -5,7 +5,7 @@ slug: /contributing
 
 # Contributing
 
-The project welcomes pull requests! Here's a quick howto:
+Bluefin welcomes pull requests! Here's a quick howto:
 
 1. Find what to work on via our [help wanted issues](https://github.com/issues?q=is%3Aopen+is%3Aissue+user%3Aublue-os+archived%3Afalse+label%3A%22help+wanted%22)
 1. Ask questions in your PR or file an issue if you need help.
@@ -27,12 +27,12 @@ All types of contributions are encouraged and valued. Please make sure to read t
 
 The community looks forward to your contributions!
 
-If you like the project, but just don't have time to contribute, that's fine. There are other ways to support the project and show your appreciation, which we would also be very happy about:
+If you like Bluefin, but just don't have time to contribute, that's fine. There are other ways to support Bluefin and show your appreciation, which we would also be very happy about:
 
-- Star the project
-- Share it on all your social media (the team 💙 Mastodon)
+- Star Bluefin
+- Share it on all your social media (we 💙 Mastodon)
 - Refer this project in your project's readme.
-- Mention the project at local meetups and tell your friends/colleagues!
+- Mention Bluefin at local meetups and tell your friends/colleagues!
 
 ## Code of Conduct
 
@@ -49,15 +49,15 @@ If you want to ask a question, ask in the [discussion forum](https://community.p
 
 :::info
 
-When contributing to this project, you must agree that you have authored 100% of the content, that you have the necessary rights to the content and that the content you contribute may be provided under the project license.
+When contributing to Bluefin, you must agree that you have authored 100% of the content, that you have the necessary rights to the content and that the content you contribute may be provided under the project license.
 
 :::
 
-Generally speaking the project tries to follow the [Lazy Consensus](https://community.apache.org/committers/decisionMaking.html) model of development to keep the builds healthy and people happy.
+Generally speaking Bluefin tries to follow the [Lazy Consensus](https://community.apache.org/committers/decisionMaking.html) model of development to keep the builds healthy and people happy.
 
 - If you're looking for consensus to make a decision post an issue for feedback and remember to account for timezones and weekends/holidays/work time.
-- The project wants people to be opinionated in their builds so it's more of a loose confederation of repos than a top-down org.
-- Try not to merge your own stuff, ask for a review. At some point when the project has enough reviewers it will be turning on branch protection.
+- Bluefin wants people to be opinionated in their builds so it's more of a loose confederation of repos than a top-down org.
+- Try not to merge your own stuff, ask for a review. At some point when Bluefin has enough reviewers it will be turning on branch protection.
 
 Ashley Willis has a great introductory post called [How to Be a Good Open Source Contributor During Hacktoberfest and Beyond](https://dev.to/github/how-to-be-a-good-open-source-contributor-during-hacktoberfest-and-beyond-cdi) that has useful tips if you are just getting started.
 
@@ -79,7 +79,7 @@ These include following project conventions, making small pull requests, and com
 
 ### Submitting a Pull Request
 
-If you want to contribute code to the project, the general workflow is as follows:
+If you want to contribute code to Bluefin, the general workflow is as follows:
 
 1. [Fork the desired project repository on GitHub](https://docs.github.com/en/get-started/quickstart/fork-a-repo#forking-a-repository).
 2. [Clone your fork to your own local machine](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository).
