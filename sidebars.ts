@@ -30,6 +30,17 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
+      label: "Universal Blue Ecosystem",
+      collapsed: false,
+      items: [
+        "ecosystem-overview",
+        "ecosystem-comparison",
+        "ecosystem-integration",
+        "ecosystem-community",
+      ],
+    },
+    {
+      type: "category",
       label: "Project Information",
       collapsed: false,
       items: [
