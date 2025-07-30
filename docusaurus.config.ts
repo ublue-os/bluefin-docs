@@ -49,6 +49,14 @@ const config: Config = {
           editUrl: "https://github.com/ublue-os/bluefin-docs/edit/main/",
           authorsMapPath: "authors.yaml",
         },
+        blog: {
+          blogTitle: "Bluefin Changelogs",
+          blogDescription: "All the changes in Bluefin",
+          blogSidebarCount: "ALL",
+          blogSidebarTitle: "Releases",
+          editUrl: "https://github.com/ublue-os/bluefin-docs/edit/main/",
+          authorsMapPath: "authors.yaml",
+        },
         theme: {
           customCss: "./src/css/custom.css",
         },
