@@ -141,15 +141,15 @@ jobs:
             if [[ "$TAG_NAME" == *"gts"* ]]; then
               RELEASE_TYPE="GTS"
               RELEASE_TYPE_SLUG="gts"
-              ((GTS_COUNT++))
+              GTS_COUNT=$((GTS_COUNT + 1))
             elif [[ "$PRERELEASE" == "true" ]]; then
               RELEASE_TYPE="Other (Pre-release)"
               RELEASE_TYPE_SLUG="other"
-              ((OTHER_COUNT++))
+              OTHER_COUNT=$((OTHER_COUNT + 1))
             else
               RELEASE_TYPE="Stable"
               RELEASE_TYPE_SLUG="stable"
-              ((STABLE_COUNT++))
+              STABLE_COUNT=$((STABLE_COUNT + 1))
             fi
             
             # Format the published date
