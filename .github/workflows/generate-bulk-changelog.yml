@@ -1,0 +1,234 @@
+name: Generate Bulk Changelog
+
+on:
+  workflow_dispatch:
+    inputs:
+      max_releases:
+        description: 'Maximum number of releases to fetch (default: 50)'
+        required: false
+        default: '50'
+        type: string
+
+jobs:
+  generate-changelog:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - name: Fetch releases from ublue-os/bluefin
+        id: fetch_releases
+        run: |
+          MAX_RELEASES="${{ github.event.inputs.max_releases || '50' }}"
+          echo "Fetching up to $MAX_RELEASES releases from ublue-os/bluefin..."
+          
+          # Calculate pagination parameters
+          PER_PAGE=30  # GitHub API maximum per page
+          PAGES_NEEDED=$(( (MAX_RELEASES + PER_PAGE - 1) / PER_PAGE ))
+          
+          echo "Will fetch $PAGES_NEEDED pages of $PER_PAGE releases each"
+          
+          # Create temporary file to store all releases
+          RELEASES_FILE="/tmp/all_releases.json"
+          echo "[]" > "$RELEASES_FILE"
+          
+          # Fetch releases from multiple pages
+          for page in $(seq 1 $PAGES_NEEDED); do
+            echo "Fetching page $page..."
+            
+            RESPONSE=$(curl -s -H "Accept: application/vnd.github.v3+json" \
+              "https://api.github.com/repos/ublue-os/bluefin/releases?page=$page&per_page=$PER_PAGE")
+            
+            # Check if request was successful
+            if echo "$RESPONSE" | jq -e '.message' > /dev/null 2>&1; then
+              echo "Error: Failed to fetch releases from page $page"
+              echo "API Response: $RESPONSE"
+              exit 1
+            fi
+            
+            # Check if we got an array
+            if ! echo "$RESPONSE" | jq -e 'type == "array"' > /dev/null 2>&1; then
+              echo "Error: Expected array but got: $RESPONSE"
+              exit 1
+            fi
+            
+            # Merge with existing releases
+            CURRENT_RELEASES=$(cat "$RELEASES_FILE")
+            MERGED=$(echo "$CURRENT_RELEASES $RESPONSE" | jq -s 'add')
+            echo "$MERGED" > "$RELEASES_FILE"
+            
+            # Check if we have enough releases or if this page was not full
+            CURRENT_COUNT=$(echo "$MERGED" | jq 'length')
+            PAGE_COUNT=$(echo "$RESPONSE" | jq 'length')
+            
+            echo "Total releases fetched so far: $CURRENT_COUNT"
+            
+            if [ "$CURRENT_COUNT" -ge "$MAX_RELEASES" ] || [ "$PAGE_COUNT" -lt "$PER_PAGE" ]; then
+              echo "Stopping fetch - either reached max releases or no more pages available"
+              break
+            fi
+          done
+          
+          # Limit to requested number of releases and sort by published date (oldest first)
+          FINAL_RELEASES=$(cat "$RELEASES_FILE" | jq --argjson max "$MAX_RELEASES" '
+            sort_by(.published_at) | .[:$max]
+          ')
+          
+          echo "$FINAL_RELEASES" > "$RELEASES_FILE"
+          
+          FINAL_COUNT=$(echo "$FINAL_RELEASES" | jq 'length')
+          echo "Final release count: $FINAL_COUNT"
+          echo "releases_file=$RELEASES_FILE" >> $GITHUB_OUTPUT
+          echo "release_count=$FINAL_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Process releases and generate changelog
+        id: generate_changelog
+        run: |
+          RELEASES_FILE="${{ steps.fetch_releases.outputs.releases_file }}"
+          RELEASE_COUNT="${{ steps.fetch_releases.outputs.release_count }}"
+          
+          # Create changelog markdown file
+          CHANGELOG_FILE="/tmp/bulk_changelog.md"
+          TIMESTAMP=$(date '+%Y-%m-%d-%H%M%S')
+          
+          # Generate frontmatter for blog post
+          cat > "$CHANGELOG_FILE" << 'EOF_HEADER'
+          ---
+          title: "Bluefin Release Changelog - Last RELEASE_COUNT Releases"
+          slug: bluefin-bulk-changelog-TIMESTAMP
+          authors: [bluefin-release-bot]
+          tags: [release, bluefin, changelog, bulk]
+          ---
+          
+          This is a comprehensive changelog of the last RELEASE_COUNT Bluefin releases, sorted by publish date (oldest first).
+          
+          <!--truncate-->
+          
+          EOF_HEADER
+          
+          # Replace placeholders in header
+          sed -i "s/RELEASE_COUNT/$RELEASE_COUNT/g" "$CHANGELOG_FILE"
+          sed -i "s/TIMESTAMP/$TIMESTAMP/g" "$CHANGELOG_FILE"
+          
+          # Initialize counters for release types
+          GTS_COUNT=0
+          STABLE_COUNT=0
+          OTHER_COUNT=0
+          
+          # Process each release
+          echo "Processing $RELEASE_COUNT releases..."
+          
+          # Read all releases into a variable first to avoid repeated file reads
+          ALL_RELEASES=$(cat "$RELEASES_FILE")
+          
+          for i in $(seq 0 $((RELEASE_COUNT - 1))); do
+            echo "Processing release $((i + 1))/$RELEASE_COUNT..."
+            
+            # Extract release data using jq
+            RELEASE_DATA=$(echo "$ALL_RELEASES" | jq -r --argjson idx "$i" '.[$idx]')
+            
+            TAG_NAME=$(echo "$RELEASE_DATA" | jq -r '.tag_name')
+            RELEASE_NAME=$(echo "$RELEASE_DATA" | jq -r '.name // .tag_name')
+            RELEASE_BODY=$(echo "$RELEASE_DATA" | jq -r '.body // ""')
+            PUBLISHED_AT=$(echo "$RELEASE_DATA" | jq -r '.published_at')
+            HTML_URL=$(echo "$RELEASE_DATA" | jq -r '.html_url')
+            PRERELEASE=$(echo "$RELEASE_DATA" | jq -r '.prerelease')
+            
+            # Determine release type and increment counters
+            if [[ "$TAG_NAME" == *"gts"* ]]; then
+              RELEASE_TYPE="GTS"
+              RELEASE_TYPE_SLUG="gts"
+              ((GTS_COUNT++))
+            elif [[ "$PRERELEASE" == "true" ]]; then
+              RELEASE_TYPE="Other (Pre-release)"
+              RELEASE_TYPE_SLUG="other"
+              ((OTHER_COUNT++))
+            else
+              RELEASE_TYPE="Stable"
+              RELEASE_TYPE_SLUG="stable"
+              ((STABLE_COUNT++))
+            fi
+            
+            # Format the published date
+            FORMATTED_DATE=$(date -u -d "$PUBLISHED_AT" '+%Y-%m-%d %H:%M UTC' 2>/dev/null || echo "$PUBLISHED_AT")
+            
+            # Add release section to changelog
+            cat >> "$CHANGELOG_FILE" << EOF_RELEASE
+          
+          ## [$RELEASE_NAME]($HTML_URL)
+          
+          **Tag:** \`$TAG_NAME\` | **Type:** $RELEASE_TYPE | **Published:** $FORMATTED_DATE
+          
+          EOF_RELEASE
+            
+            # Add release body if it exists and is not empty
+            if [[ -n "$RELEASE_BODY" && "$RELEASE_BODY" != "null" ]]; then
+              echo "$RELEASE_BODY" >> "$CHANGELOG_FILE"
+              echo "" >> "$CHANGELOG_FILE"
+            else
+              echo "*No release notes provided.*" >> "$CHANGELOG_FILE"
+              echo "" >> "$CHANGELOG_FILE"
+            fi
+            
+            echo "---" >> "$CHANGELOG_FILE"
+            echo "" >> "$CHANGELOG_FILE"
+          done
+          
+          # Add summary section at the end
+          cat >> "$CHANGELOG_FILE" << EOF_SUMMARY
+          
+          ## Release Summary
+          
+          This changelog includes **$RELEASE_COUNT** releases:
+          
+          - **GTS Releases:** $GTS_COUNT
+          - **Stable Releases:** $STABLE_COUNT
+          - **Other/Pre-releases:** $OTHER_COUNT
+          
+          **Generated on:** $(date '+%Y-%m-%d %H:%M UTC')
+          
+          For installation instructions and more information, visit the [Bluefin documentation](https://docs.projectbluefin.io/).
+          EOF_SUMMARY
+          
+          echo "Changelog generated successfully!"
+          echo "changelog_file=$CHANGELOG_FILE" >> $GITHUB_OUTPUT
+          echo "gts_count=$GTS_COUNT" >> $GITHUB_OUTPUT
+          echo "stable_count=$STABLE_COUNT" >> $GITHUB_OUTPUT
+          echo "other_count=$OTHER_COUNT" >> $GITHUB_OUTPUT
+          
+          # Display file size and first few lines for verification
+          FILE_SIZE=$(wc -c < "$CHANGELOG_FILE")
+          echo "Generated changelog file size: $FILE_SIZE bytes"
+          
+          echo "First 20 lines of generated changelog:"
+          head -20 "$CHANGELOG_FILE"
+
+      - name: Upload changelog as artifact
+        uses: actions/upload-artifact@4bf8e3a6f3e1e8d2da35a5b0ab2c45c8bcb71dd8 # v4
+        with:
+          name: bluefin-bulk-changelog-${{ github.run_number }}
+          path: ${{ steps.generate_changelog.outputs.changelog_file }}
+          retention-days: 30
+
+      - name: Create summary
+        run: |
+          RELEASE_COUNT="${{ steps.fetch_releases.outputs.release_count }}"
+          GTS_COUNT="${{ steps.generate_changelog.outputs.gts_count }}"
+          STABLE_COUNT="${{ steps.generate_changelog.outputs.stable_count }}"
+          OTHER_COUNT="${{ steps.generate_changelog.outputs.other_count }}"
+          
+          echo "## Bluefin Bulk Changelog Generation Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Total Releases Processed:** $RELEASE_COUNT" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Release Type Breakdown:" >> $GITHUB_STEP_SUMMARY
+          echo "- **GTS Releases:** $GTS_COUNT" >> $GITHUB_STEP_SUMMARY
+          echo "- **Stable Releases:** $STABLE_COUNT" >> $GITHUB_STEP_SUMMARY
+          echo "- **Other/Pre-releases:** $OTHER_COUNT" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📦 **Artifact:** \`bluefin-bulk-changelog-${{ github.run_number }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The generated markdown changelog is suitable for blog use and has been uploaded as an artifact." >> $GITHUB_STEP_SUMMARY
