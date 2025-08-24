@@ -5,7 +5,7 @@ on:
     - cron: "0 10 * * *" # 6am US Eastern Time (ET) = 10:00 UTC
   workflow_dispatch:
   repository_dispatch:
-    types: [release-published]
+    types: [bluefin-release]
 
 jobs:
   sync-release:
