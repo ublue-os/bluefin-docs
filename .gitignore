@@ -8,9 +8,6 @@
 .docusaurus
 .cache-loader
 
-# Changelog stream directories (generated from symbolic links)
-/changelogs-streams
-
 # Misc
 .DS_Store
 .env.local

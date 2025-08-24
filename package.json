@@ -5,7 +5,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "build": "docusaurus build",
+    "build": "docusaurus build && node scripts/generate-stream-feeds.js",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
@@ -24,6 +24,7 @@
     "@mdx-js/react": "^3.0.0",
     "caniuse-lite": "^1.0.30001727",
     "clsx": "^2.0.0",
+    "fast-xml-parser": "^5.2.5",
     "prism-react-renderer": "^2.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
