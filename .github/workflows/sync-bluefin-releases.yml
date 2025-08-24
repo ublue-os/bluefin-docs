@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: "0 10 * * *" # 6am US Eastern Time (ET) = 10:00 UTC
   workflow_dispatch:
+  repository_dispatch:
+    types: [release-published]
 
 jobs:
   sync-release:
@@ -46,7 +48,8 @@ jobs:
             REPOSITORIES_ACCESSED="$REPOSITORIES_ACCESSED ublue-os/bluefin"
             
             # Find latest stable release (tag contains 'stable')
-            BLUEFIN_STABLE_RELEASE=$(echo "$BLUEFIN_RELEASES" | jq -r '[.[] | select(.tag_name | test("stable")) | select(.prerelease == false)] | .[0]')
+            # Apply proper sorting to ensure we get the most recent stable release
+            BLUEFIN_STABLE_RELEASE=$(echo "$BLUEFIN_RELEASES" | jq -r '[.[] | select(.tag_name | test("stable")) | select(.prerelease == false)] | sort_by(.published_at) | reverse | .[0]')
             if [[ "$BLUEFIN_STABLE_RELEASE" != "null" ]]; then
               BLUEFIN_STABLE_TAG=$(echo "$BLUEFIN_STABLE_RELEASE" | jq -r '.tag_name')
               BLUEFIN_STABLE_URL=$(echo "$BLUEFIN_STABLE_RELEASE" | jq -r '.html_url')
@@ -66,7 +69,8 @@ jobs:
             fi
             
             # Find latest GTS release (tag contains 'gts')
-            BLUEFIN_GTS_RELEASE=$(echo "$BLUEFIN_RELEASES" | jq -r '[.[] | select(.tag_name | test("gts")) | select(.prerelease == false)] | .[0]')
+            # Note: Removed prerelease filter as GTS releases might be marked as prerelease
+            BLUEFIN_GTS_RELEASE=$(echo "$BLUEFIN_RELEASES" | jq -r '[.[] | select(.tag_name | test("gts"))] | sort_by(.published_at) | reverse | .[0]')
             if [[ "$BLUEFIN_GTS_RELEASE" != "null" ]]; then
               BLUEFIN_GTS_TAG=$(echo "$BLUEFIN_GTS_RELEASE" | jq -r '.tag_name')
               BLUEFIN_GTS_URL=$(echo "$BLUEFIN_GTS_RELEASE" | jq -r '.html_url')
