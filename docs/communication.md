@@ -27,5 +27,18 @@ slug: communications
 
 ## RSS Feeds
 
-- **Blog** - [https://docs.projectbluefin.io/blog/rss.xml](https://docs.projectbluefin.io/blog/rss.xml)
-- **Changelogs** - [https://docs.projectbluefin.io/changelogs/rss.xml](https://docs.projectbluefin.io/changelogs/rss.xml)
+- **Blog** 
+  - RSS: [https://docs.projectbluefin.io/blog/rss.xml](https://docs.projectbluefin.io/blog/rss.xml)
+  - Atom: [https://docs.projectbluefin.io/blog/atom.xml](https://docs.projectbluefin.io/blog/atom.xml)
+- **Changelogs (All)** 
+  - RSS: [https://docs.projectbluefin.io/changelogs/rss.xml](https://docs.projectbluefin.io/changelogs/rss.xml)
+  - Atom: [https://docs.projectbluefin.io/changelogs/atom.xml](https://docs.projectbluefin.io/changelogs/atom.xml)
+- **Changelogs (LTS)** 
+  - RSS: [https://docs.projectbluefin.io/changelogs/lts/rss.xml](https://docs.projectbluefin.io/changelogs/lts/rss.xml)
+  - Atom: [https://docs.projectbluefin.io/changelogs/lts/atom.xml](https://docs.projectbluefin.io/changelogs/lts/atom.xml)
+- **Changelogs (Stable)** 
+  - RSS: [https://docs.projectbluefin.io/changelogs/stable/rss.xml](https://docs.projectbluefin.io/changelogs/stable/rss.xml)
+  - Atom: [https://docs.projectbluefin.io/changelogs/stable/atom.xml](https://docs.projectbluefin.io/changelogs/stable/atom.xml)
+- **Changelogs (GTS)** 
+  - RSS: [https://docs.projectbluefin.io/changelogs/gts/rss.xml](https://docs.projectbluefin.io/changelogs/gts/rss.xml)
+  - Atom: [https://docs.projectbluefin.io/changelogs/gts/atom.xml](https://docs.projectbluefin.io/changelogs/gts/atom.xml)
