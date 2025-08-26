@@ -78,3 +78,6 @@ If your software is included in Bluefin and missing from this list, please send 
 - [restic](https://github.com/sponsors/restic) - Fast, secure, efficient backup program (package: `restic`)
 - [Tailscale](https://github.com/sponsors/tailscale) - VPN service for secure networking (package: `tailscale`)
 - [tmux](https://github.com/sponsors/tmux) - Terminal multiplexer (package: `tmux`)
+
+![terminal](https://github.com/user-attachments/assets/ec927e03-e25b-4bef-861c-b015924ead92)
+
