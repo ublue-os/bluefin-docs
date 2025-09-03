@@ -129,7 +129,7 @@ const config: Config = {
     ],
 
     // Social card that shows up on discord when you share it
-    image: "img/meta.png",
+    image: "img/meta.webp",
     navbar: {
       title: "Bluefin",
       logo: {
