@@ -16,7 +16,7 @@ bluefin-release-bot:
   title: Head Hen · Deinonychus antirropus
   url: https://github.com/ublue-os/bluefin
   email: jorge.castro@gmail.com
-  image_url: /img/bluefin-release-bot.png
+  image_url: /img/bluefin-release-bot.webp
   page: true
 bluefin-gts-release-bot:
   name: Bluefin GTS
