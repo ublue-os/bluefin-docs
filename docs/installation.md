@@ -20,6 +20,7 @@ This page is a short [runbook](https://www.pagerduty.com/resources/learn/what-is
 Review the [Fedora Silverblue installation instructions](https://docs.fedoraproject.org/en-US/fedora-silverblue/installation/). Some differences to consider:
 
 - Use the [Fedora Media Writer](https://flathub.org/apps/org.fedoraproject.MediaWriter) to create installation media. Other creation methods may not work properly
+  - Use of Ventoy is **unsupported**
 - Older BIOS-based systems are **unsupported**; only UEFI systems are supported
 - Dual booting off of the same disk is **unsupported**; use a dedicated drive for another operating system and use your BIOS to choose another OS to boot off of
   - Bluefin supports an [installation on an external drive](/tips/#bluefin-to-go-using-an-external-drive) if you want to try it on bare metal before committing
@@ -40,12 +41,7 @@ Review the [Fedora Silverblue installation instructions](https://docs.fedoraproj
 
 ### Why 16 GB RAM Minimum?
 
-Bluefin ships with an extensive cloud-native development stack. These workloads typically scale out to replicate entire clusters of computers and demand more resources than typical workloads:
-
-**Container Runtime**: Docker CE, Podman, and container composition tools
-**Development Tools**: Multiple language runtimes and development environments  
-**Desktop Environment**: Modern GNOME with extensions and visual effects
-**System Architecture**: Atomic/immutable OS with OSTree requiring additional overhead
+Bluefin ships with an extensive cloud-native development stack. These workloads typically scale out to replicate entire clusters of computers and demand more resources than typical workloads.
 
 _These requirements ensure smooth operation of Bluefin's integrated development workflow and container-first architecture._
 

@@ -11,12 +11,12 @@ Accelerate operating system development by integrating with the cloud native eco
 
 ## Commitment to the Ecosystem
 
-- Focus on improving the upstream experience with existing distributions instead of building a custom distribution:
+- Focus on improving the upstream experience by moving away from the traditional distribution model entirely and focusing on these areas:
   - Flathub
   - Homebrew
-  - Fedora CoreOS / CentOS Stream
+  - A base OS image
 - Take a "distroless" approach to images, the project should be invisible
-- Actively encourage upstream contribution by intentionally limiting scope
+- Actively encourage upstream contribution by intentionally limiting scope to ensure that our users understand the importance of supporting Flathub and Homebrew.
 
 ## Community and Project
 
@@ -37,5 +37,5 @@ Accelerate operating system development by integrating with the cloud native eco
 - The project will be brutal about making things out of scope. There is no extra work for no reason, as SRE/cloud-native people the team will embrace being lazy and automating the world, not writing custom installers to partition people's disks, there ain't time for that
 - If the team has to make a thing, it's because there is no choice, and if it does have to make it, it's not happy about it.
 - The project is mostly feature complete and not making major changes. Not quite "maintenance mode" but also not significantly adding code. The team front loads saying "No" to keep the project lean.
-- The goal is to give people what they want with a focus on sustainability and maintenance, more like "My expert linux friend set up my Fedora for me" than a fork or derivative.
+- The goal is to give people what they want with a focus on sustainability and maintenance, more like "My expert linux friend set this up for me" than a fork or derivative.
 - Members of the team have multiple decades of linux distro experience, distros are hard, so the team is not making a "Linux distro."
