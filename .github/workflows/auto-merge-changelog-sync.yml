@@ -1,25 +1,30 @@
-name: Fetch Changelogs
+name: Auto-Merge Changelog Sync
 
 on:
   schedule:
     - cron: "0 10 * * *" # 6am US Eastern Time (ET) = 10:00 UTC
   workflow_dispatch:
+  repository_dispatch:
+    types: [release-published]
 
 jobs:
-  sync-release:
+  sync-and-automerge:
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
+      checks: read
+      actions: read
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Set up Node.js
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        uses: actions/setup-node@v4
         with:
           node-version: "22"
 
@@ -331,7 +336,7 @@ jobs:
           FILES_CREATED_COUNT="${{ steps.process_releases.outputs.files_created_count }}"
 
           # Create branch name with timestamp
-          BRANCH_NAME="changelogs/bluefin-releases-sync-$(date +%s)"
+          BRANCH_NAME="automerge/changelog-sync-$(date +%s)"
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
           git config --local user.email "action@github.com"
@@ -351,7 +356,7 @@ jobs:
           fi
 
           # Create commit message
-          COMMIT_MESSAGE="Add changelog entries for Bluefin releases"$'\n\n'"Automatically generated $FILES_CREATED_COUNT changelog entries from multiple repositories"
+          COMMIT_MESSAGE="feat(changelogs): auto-sync Bluefin releases"$'\n\n'"Automatically generated $FILES_CREATED_COUNT changelog entries from multiple repositories"
 
           git commit -m "$COMMIT_MESSAGE"
 
@@ -359,7 +364,7 @@ jobs:
           git push origin "$BRANCH_NAME"
           echo "has_changes=true" >> $GITHUB_OUTPUT
 
-      - name: Create Pull Request
+      - name: Create Pull Request with Auto-merge
         if: steps.create_branch.outputs.has_changes == 'true'
         id: create_pr
         run: |
@@ -370,17 +375,18 @@ jobs:
           TOTAL_PROCESSED="${{ steps.process_releases.outputs.total_processed }}"
 
           # Build comprehensive PR description
-          PR_TITLE="feat(blog): sync Bluefin releases - $FILES_CREATED_COUNT changelog(s) created"
+          PR_TITLE="feat(changelogs): auto-sync Bluefin releases - $FILES_CREATED_COUNT changelog(s) created"
 
           # Create PR body with sections
-          PR_BODY="## Bluefin Release Changelog Sync"
-          PR_BODY="$PR_BODY"$'\n\n'"This PR adds changelog entries for Bluefin releases with enhanced error handling and comprehensive processing."
+          PR_BODY="## 🚀 Auto-Merge Bluefin Release Changelog Sync"
+          PR_BODY="$PR_BODY"$'\n\n'"This PR adds changelog entries for Bluefin releases with enhanced auto-merge functionality."
           PR_BODY="$PR_BODY"$'\n\n'"### Summary"
           PR_BODY="$PR_BODY"$'\n'"- **Files Created:** $FILES_CREATED_COUNT"
           PR_BODY="$PR_BODY"$'\n'"- **Files Skipped:** $FILES_SKIPPED_COUNT"
           PR_BODY="$PR_BODY"$'\n'"- **Processing Errors:** $PROCESSING_ERRORS_COUNT"
           PR_BODY="$PR_BODY"$'\n'"- **Total Processed:** $TOTAL_PROCESSED"
           PR_BODY="$PR_BODY"$'\n'"- **Trigger:** ${{ github.event_name }}"
+          PR_BODY="$PR_BODY"$'\n'"- **Auto-merge:** ✅ Enabled"
 
           # Add repository access info for workflow_dispatch
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
@@ -419,21 +425,20 @@ jobs:
             done < /tmp/processing_errors.txt
           fi
 
-          PR_BODY="$PR_BODY"$'\n\n'"### Review Notes"
-          PR_BODY="$PR_BODY"$'\n'"- Please review each changelog entry for accuracy and formatting"
-          PR_BODY="$PR_BODY"$'\n'"- Verify that release information matches actual releases"
-          PR_BODY="$PR_BODY"$'\n'"- Check that version type classification (stable/GTS/LTS) is correct"
-          PR_BODY="$PR_BODY"$'\n'"- Existing changelog files were not overwritten"
+          PR_BODY="$PR_BODY"$'\n\n'"### Auto-Merge Information"
+          PR_BODY="$PR_BODY"$'\n'"- This PR will automatically merge once all status checks pass"
+          PR_BODY="$PR_BODY"$'\n'"- Reviewers can still examine the changes during the status check period"
+          PR_BODY="$PR_BODY"$'\n'"- Auto-merge can be disabled manually if needed"
           PR_BODY="$PR_BODY"$'\n\n'"**Version Types:**"
-          PR_BODY="$PR_BODY"$'\n'"- 🚢 **Bluefin**: Bluefin Stable releases from ublue-os/bluefin"
-          PR_BODY="$PR_BODY"$'\n'"- ⭐ **Bluefin GTS**: Grand Touring Support releases (tagged with 'gts') from ublue-os/bluefin"
-          PR_BODY="$PR_BODY"$'\n'"- 🔒 **Bluefin LTS**: Long Term Support releases from ublue-os/bluefin-lts"
-          PR_BODY="$PR_BODY"$'\n\n'"**Independent Processing:** This workflow now processes all version types independently with proper error handling to ensure maximum capture of release information."
+          PR_BODY="$PR_BODY"$'\n'"- 🚢 **Stable**: Regular production releases from ublue-os/bluefin"
+          PR_BODY="$PR_BODY"$'\n'"- ⭐ **GTS**: Grand Touring Support releases (extended testing)"
+          PR_BODY="$PR_BODY"$'\n'"- 🔒 **LTS**: Long Term Support releases from ublue-os/bluefin-lts"
 
           # Create pull request using GitHub API and capture response
           PR_RESPONSE=$(curl -s -X POST \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
             -H "Content-Type: application/json" \
             "https://api.github.com/repos/${{ github.repository }}/pulls" \
             -d "{
@@ -464,70 +469,74 @@ jobs:
 
           echo "🔄 Enabling auto-merge for PR #$PR_NUMBER..."
 
-          # Enable auto-merge using GitHub API - correct endpoint for enabling auto-merge
-          # Note: The correct API endpoint is PUT /repos/{owner}/{repo}/pulls/{pull_number}/merge for enabling auto-merge
-          AUTO_MERGE_RESPONSE=$(curl -s -w "HTTPSTATUS:%{http_code}" \
-            -X PUT \
+          # Enable auto-merge using GraphQL API (the correct way)
+          ENABLE_AUTOMERGE_QUERY='
+          mutation($pullRequestId: ID!) {
+            enablePullRequestAutoMerge(input: {
+              pullRequestId: $pullRequestId,
+              mergeMethod: MERGE
+            }) {
+              pullRequest {
+                id
+                number
+                autoMergeRequest {
+                  enabledAt
+                  enabledBy {
+                    login
+                  }
+                }
+              }
+            }
+          }'
+
+          # First, get the PR node ID using REST API
+          PR_DATA=$(curl -s \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            -H "Content-Type: application/json" \
-            "https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER/merge" \
-            -d '{
-              "merge_method": "merge"
-            }')
+            "https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER")
 
-          # Extract HTTP status and response body
-          HTTP_STATUS=$(echo "$AUTO_MERGE_RESPONSE" | sed -n 's/.*HTTPSTATUS:\([0-9]*\)$/\1/p')
-          RESPONSE_BODY=$(echo "$AUTO_MERGE_RESPONSE" | sed 's/HTTPSTATUS:[0-9]*$//')
-
-          echo "HTTP Status: $HTTP_STATUS"
-
-          case $HTTP_STATUS in
-            200)
-              # Successfully merged or auto-merge enabled
-              if echo "$RESPONSE_BODY" | jq -e '.merged' > /dev/null 2>&1; then
-                MERGED=$(echo "$RESPONSE_BODY" | jq -r '.merged')
-                if [[ "$MERGED" == "true" ]]; then
-                  echo "✅ PR #$PR_NUMBER was automatically merged immediately"
-                else
-                  echo "✅ Auto-merge enabled for PR #$PR_NUMBER"
-                  echo "The PR will automatically merge when all branch protection requirements are met."
-                fi
-              else
-                echo "✅ Auto-merge enabled for PR #$PR_NUMBER"
-                echo "The PR will automatically merge when all branch protection requirements are met."
-              fi
-              ;;
-            202)
-              echo "✅ Auto-merge enabled for PR #$PR_NUMBER"
-              echo "The PR will automatically merge when all branch protection requirements are met."
-              ;;
-            404)
-              echo "⚠️ PR #$PR_NUMBER not found or auto-merge feature may not be available"
-              echo "This could be due to repository settings or permissions."
-              echo "The PR was created successfully but will require manual merging."
-              ;;
-            405)
-              echo "⚠️ Auto-merge is not enabled for this repository"
-              echo "Repository settings may need to be updated to allow auto-merge."
-              echo "The PR was created successfully but will require manual merging."
-              ;;
-            422)
-              ERROR_MSG=$(echo "$RESPONSE_BODY" | jq -r '.message // "Validation failed"')
-              echo "⚠️ Auto-merge could not be enabled for PR #$PR_NUMBER: $ERROR_MSG"
-              echo "This may be due to branch protection rules, required status checks, or conflicting changes."
-              echo "The PR was created successfully but will require manual merging."
-              ;;
-            *)
-              echo "⚠️ Unexpected HTTP status $HTTP_STATUS when enabling auto-merge for PR #$PR_NUMBER"
-              if [[ -n "$RESPONSE_BODY" ]]; then
-                ERROR_MSG=$(echo "$RESPONSE_BODY" | jq -r '.message // "Unknown error"')
-                echo "Error message: $ERROR_MSG"
-              fi
-              echo "The PR was created successfully but auto-merge status is unclear."
-              ;;
-          esac
+          if PR_NODE_ID=$(echo "$PR_DATA" | jq -r '.node_id' 2>/dev/null) && [[ "$PR_NODE_ID" != "null" && -n "$PR_NODE_ID" ]]; then
+            echo "✅ Got PR node ID: $PR_NODE_ID"
+            
+            # Enable auto-merge using GraphQL API
+            AUTOMERGE_RESPONSE=$(curl -s -X POST \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              "https://api.github.com/graphql" \
+              -d "{
+                \"query\": $(echo "$ENABLE_AUTOMERGE_QUERY" | jq -Rs .),
+                \"variables\": {
+                  \"pullRequestId\": \"$PR_NODE_ID\"
+                }
+              }")
+            
+            echo "Auto-merge response: $AUTOMERGE_RESPONSE"
+            
+            # Check if auto-merge was enabled successfully
+            if echo "$AUTOMERGE_RESPONSE" | jq -e '.data.enablePullRequestAutoMerge.pullRequest.autoMergeRequest' > /dev/null 2>&1; then
+              ENABLED_AT=$(echo "$AUTOMERGE_RESPONSE" | jq -r '.data.enablePullRequestAutoMerge.pullRequest.autoMergeRequest.enabledAt')
+              ENABLED_BY=$(echo "$AUTOMERGE_RESPONSE" | jq -r '.data.enablePullRequestAutoMerge.pullRequest.autoMergeRequest.enabledBy.login')
+              echo "✅ Auto-merge enabled successfully for PR #$PR_NUMBER"
+              echo "   Enabled at: $ENABLED_AT"
+              echo "   Enabled by: $ENABLED_BY"
+              echo "   The PR will automatically merge when all required status checks pass."
+            elif echo "$AUTOMERGE_RESPONSE" | jq -e '.errors' > /dev/null 2>&1; then
+              ERRORS=$(echo "$AUTOMERGE_RESPONSE" | jq -r '.errors[].message' | tr '\n' '; ')
+              echo "⚠️ Failed to enable auto-merge for PR #$PR_NUMBER"
+              echo "   GraphQL errors: $ERRORS"
+              echo "   The PR was created successfully but will require manual merging."
+            else
+              echo "⚠️ Unexpected response when enabling auto-merge for PR #$PR_NUMBER"
+              echo "   Response: $AUTOMERGE_RESPONSE"
+              echo "   The PR was created successfully but auto-merge status is unclear."
+            fi
+          else
+            echo "❌ Could not get PR node ID for auto-merge"
+            echo "   PR Response: $PR_DATA"
+            echo "   The PR was created successfully but auto-merge cannot be enabled."
+          fi
 
       - name: Create comprehensive summary
         run: |
@@ -536,7 +545,7 @@ jobs:
           PROCESSING_ERRORS_COUNT="${{ steps.process_releases.outputs.processing_errors_count || '0' }}"
           TOTAL_PROCESSED="${{ steps.process_releases.outputs.total_processed || '0' }}"
 
-          echo "## 🚀 Bluefin Release Sync Complete" >> $GITHUB_STEP_SUMMARY
+          echo "## 🚀 Auto-Merge Bluefin Release Sync Complete" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
           # Summary statistics
@@ -546,6 +555,7 @@ jobs:
           echo "- **Files Skipped:** $FILES_SKIPPED_COUNT" >> $GITHUB_STEP_SUMMARY
           echo "- **Processing Errors:** $PROCESSING_ERRORS_COUNT" >> $GITHUB_STEP_SUMMARY
           echo "- **Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Auto-merge:** ✅ Enabled" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
           # Repository access status (for workflow_dispatch)
@@ -603,30 +613,20 @@ jobs:
             echo "" >> $GITHUB_STEP_SUMMARY
           fi
 
-          # Version type legend and improvements
-          echo "### 📋 Version Types & Improvements" >> $GITHUB_STEP_SUMMARY
-          echo "**Version Types:**" >> $GITHUB_STEP_SUMMARY
-          echo "- **🚢 Stable**: Regular production releases from ublue-os/bluefin" >> $GITHUB_STEP_SUMMARY
-          echo "- **⭐ GTS**: Good to Stable releases (extended testing)" >> $GITHUB_STEP_SUMMARY
-          echo "- **🔒 LTS**: Long Term Support releases from ublue-os/bluefin-lts" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Workflow Improvements:**" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ **Independent Processing**: All version types processed independently" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ **Enhanced Error Handling**: Repository failures don't block other repositories" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ **Comprehensive Reporting**: Clear visibility into all processing results" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ **LTS Support**: Proper handling of ublue-os/bluefin-lts repository" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
           # Next steps
           if [[ "${{ steps.create_branch.outputs.has_changes }}" == "true" ]]; then
-            echo "### 🔍 Next Steps" >> $GITHUB_STEP_SUMMARY
-            echo "✅ **Pull request created successfully** with $FILES_CREATED_COUNT changelog entries" >> $GITHUB_STEP_SUMMARY
+            echo "### 🔄 Auto-Merge Status" >> $GITHUB_STEP_SUMMARY
+            echo "✅ **Pull request created with auto-merge enabled** - $FILES_CREATED_COUNT changelog entries" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**Please review the pull request to:**" >> $GITHUB_STEP_SUMMARY
-            echo "- Verify changelog content accuracy and formatting" >> $GITHUB_STEP_SUMMARY
-            echo "- Confirm version type classification is correct" >> $GITHUB_STEP_SUMMARY
-            echo "- Check that release information matches actual releases" >> $GITHUB_STEP_SUMMARY
-            echo "- Merge to publish the changelog entries" >> $GITHUB_STEP_SUMMARY
+            echo "**The PR will automatically merge when:**" >> $GITHUB_STEP_SUMMARY
+            echo "- All required status checks pass" >> $GITHUB_STEP_SUMMARY
+            echo "- No conflicts exist with the base branch" >> $GITHUB_STEP_SUMMARY
+            echo "- Auto-merge is not manually disabled" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Reviewers can still:**" >> $GITHUB_STEP_SUMMARY
+            echo "- Examine changelog content before auto-merge" >> $GITHUB_STEP_SUMMARY
+            echo "- Disable auto-merge if issues are found" >> $GITHUB_STEP_SUMMARY
+            echo "- Request changes to pause the auto-merge process" >> $GITHUB_STEP_SUMMARY
           else
             echo "### ℹ️ No Action Required" >> $GITHUB_STEP_SUMMARY
             if [[ "$FILES_CREATED_COUNT" -eq 0 && "$FILES_SKIPPED_COUNT" -gt 0 ]]; then

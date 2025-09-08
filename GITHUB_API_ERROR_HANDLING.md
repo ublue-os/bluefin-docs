@@ -57,31 +57,37 @@ The GitHub workflow (`sync-bluefin-releases.yml`) now includes:
 ## Error Types and Handling
 
 ### Authentication Errors (Code: 10)
+
 - **Detection**: Invalid or missing GitHub token
 - **Handling**: Clear error message with authentication instructions
 - **Suggestions**: Run `gh auth login` or set `GH_TOKEN` environment variable
 
 ### Rate Limit Errors (Code: 11)
+
 - **Detection**: API rate limits exceeded
 - **Handling**: Automatic waiting for rate limit reset (up to 1 hour)
 - **Suggestions**: Use different token or reduce API call frequency
 
 ### Not Found Errors (Code: 12)
+
 - **Detection**: Repository or release not found
 - **Handling**: Skip missing items with clear logging
 - **Suggestions**: Verify repository names and accessibility
 
 ### Network Errors (Code: 13)
+
 - **Detection**: Connection timeouts or network issues
 - **Handling**: Exponential backoff retry (up to 3 attempts)
 - **Suggestions**: Check connectivity and GitHub API status
 
 ### Invalid Response Errors (Code: 14)
+
 - **Detection**: Malformed or unexpected API responses
 - **Handling**: Validation and re-attempts
 - **Suggestions**: Check API endpoint and data format
 
 ### Repository Access Errors (Code: 15)
+
 - **Detection**: Permission or access issues
 - **Handling**: Clear error reporting with repository context
 - **Suggestions**: Verify permissions and repository existence
@@ -125,7 +131,7 @@ api_health_check
 ### Environment Variables
 
 - `DEBUG_MODE=true`: Enable debug logging
-- `VERBOSE_MODE=true`: Enable verbose logging  
+- `VERBOSE_MODE=true`: Enable verbose logging
 - `FORCE_REGENERATE_CHANGELOGS=true`: Force regeneration of existing files
 - `GH_TOKEN`: GitHub API token for authentication
 
@@ -141,6 +147,7 @@ api_health_check
 ### Common Issues and Solutions
 
 1. **Authentication Failed**
+
    ```bash
    gh auth login
    # OR
@@ -148,14 +155,16 @@ api_health_check
    ```
 
 2. **Rate Limit Exceeded**
+
    ```bash
    # Check current rate limit status
    gh api rate_limit
-   
+
    # Wait for reset or use different token
    ```
 
 3. **Repository Not Found**
+
    ```bash
    # Verify repository name and access
    gh repo view ublue-os/bluefin
@@ -172,7 +181,7 @@ api_health_check
 ### Log Levels
 
 - **DEBUG**: Detailed internal operations
-- **VERBOSE**: Detailed process information  
+- **VERBOSE**: Detailed process information
 - **INFO**: General informational messages
 - **WARN**: Warning conditions that don't prevent operation
 - **ERROR**: Error conditions that prevent operation
@@ -184,7 +193,7 @@ The `api_health_check` function provides comprehensive status:
 ```bash
 [INFO] 🔍 Performing GitHub API health check...
 [INFO] ✅ Authentication: OK
-[INFO] ✅ Rate limits: OK  
+[INFO] ✅ Rate limits: OK
 [INFO] ✅ API connectivity: OK
 [INFO] 🎉 GitHub API health check passed
 ```

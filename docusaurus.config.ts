@@ -84,8 +84,7 @@ const config: Config = {
          * Blog configuration
          */
         blogTitle: "Changelogs",
-        blogDescription:
-          "Changelogs for Bluefin",
+        blogDescription: "Changelogs for Bluefin",
         blogSidebarCount: "ALL",
         blogSidebarTitle: "All Changelogs",
         authorsMapPath: "authors.yaml",
@@ -135,7 +134,7 @@ const config: Config = {
       logo: {
         alt: "Bluefin",
         src: "img/logo.svg",
-        href: "https://projectbluefin.io/"
+        href: "https://projectbluefin.io/",
       },
       items: [
         {
