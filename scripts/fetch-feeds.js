@@ -91,6 +91,60 @@ async function fetchAndParseFeed(url, filename) {
   }
 }
 
+async function fetchGitHubReleases(repo, filename) {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const url = `https://api.github.com/repos/${repo}/releases?per_page=30`;
+    console.log(`Fetching ${url}...`);
+
+    const response = await fetch(url);
+    const releases = await response.json();
+
+    if (!Array.isArray(releases)) {
+      console.error(`Invalid response from ${url}:`, releases);
+      return null;
+    }
+
+    const formattedReleases = releases.map((release) => ({
+      title: release.tag_name + (release.name ? `: ${release.name}` : ''),
+      link: release.html_url,
+      pubDate: release.published_at,
+      contentSnippet: release.body ? release.body.substring(0, 200) + "..." : "",
+      content: release.body || "",
+    }));
+
+    const feedsDir = path.join(__dirname, "..", "static", "feeds");
+    if (!fs.existsSync(feedsDir)) {
+      fs.mkdirSync(feedsDir, { recursive: true });
+    }
+
+    // Save as JSON
+    const jsonPath = path.join(feedsDir, filename.replace(".xml", ".json"));
+    fs.writeFileSync(
+      jsonPath,
+      JSON.stringify(
+        {
+          title: `Release notes from ${repo.split('/')[1]}`,
+          items: formattedReleases,
+        },
+        null,
+        2,
+      ),
+    );
+
+    console.log(`Converted and saved to ${jsonPath}`);
+    return formattedReleases;
+  } catch (error) {
+    console.error(`Error fetching GitHub releases for ${repo}:`, error);
+    // Fallback to Atom feed if GitHub API fails
+    console.log("Falling back to Atom feed...");
+    return await fetchAndParseFeed(
+      `https://github.com/${repo}/releases.atom`,
+      filename,
+    );
+  }
+}
+
 async function main() {
   await fetchAndParseFeed(
     "https://github.com/ublue-os/bluefin/releases.atom",
@@ -106,4 +160,4 @@ if (require.main === module) {
   main().catch(console.error);
 }
 
-module.exports = { fetchAndParseFeed };
+module.exports = { fetchAndParseFeed, fetchGitHubReleases };
