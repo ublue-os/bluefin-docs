@@ -34,6 +34,16 @@ const CommunityFeeds: React.FC = () => {
           />
         </div>
 
+        {/* 
+          Feed Grid - Shows recent releases for each Bluefin variant
+          
+          NOTE: Currently limited by GitHub Atom feed restrictions (~10 releases total)
+          resulting in ~5 items each for GTS and Stable releases. The fetch-feeds.js 
+          script tries GitHub REST API first to get 30 releases, falling back to Atom feeds.
+          
+          In production with proper API access, this will show the full maxItems={10}
+          for each release type as configured.
+        */}
         <div className={styles.feedGrid}>
           <div className={styles.feedColumn}>
             <FeedItems

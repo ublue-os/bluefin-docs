@@ -2,6 +2,77 @@ const fs = require("fs");
 const path = require("path");
 const { parseString } = require("xml2js");
 
+/*
+ * Bluefin Documentation Feed Fetcher
+ * 
+ * This script fetches GitHub releases to populate the changelog feeds on the documentation site.
+ * 
+ * ISSUE: GitHub Atom feeds only return ~10 most recent releases total
+ * IMPACT: With both stable- and gts- releases in the same feed, we only get ~5 of each type
+ * SOLUTION: This script tries GitHub REST API first (30 releases), falls back to Atom feeds
+ * 
+ * In production environments with proper API access, this will fetch enough releases 
+ * to show the configured maxItems={10} for each release type (GTS, Stable).
+ * 
+ * To test locally with more data, you can:
+ * 1. Set up GitHub API token in environment
+ * 2. Or manually edit the feed JSON files in static/feeds/ 
+ */
+async function fetchGitHubReleases(repo, filename) {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const url = `https://api.github.com/repos/${repo}/releases?per_page=30`;
+    console.log(`Fetching ${url}...`);
+
+    const response = await fetch(url);
+    const releases = await response.json();
+
+    if (!Array.isArray(releases)) {
+      console.error(`Invalid response from ${url}:`, releases);
+      return null;
+    }
+
+    const formattedReleases = releases.map((release) => ({
+      title: release.tag_name + (release.name ? `: ${release.name}` : ''),
+      link: release.html_url,
+      pubDate: release.published_at,
+      contentSnippet: release.body ? release.body.substring(0, 200) + "..." : "",
+      content: release.body || "",
+    }));
+
+    const feedsDir = path.join(__dirname, "..", "static", "feeds");
+    if (!fs.existsSync(feedsDir)) {
+      fs.mkdirSync(feedsDir, { recursive: true });
+    }
+
+    // Save as JSON
+    const jsonPath = path.join(feedsDir, filename.replace(".xml", ".json"));
+    fs.writeFileSync(
+      jsonPath,
+      JSON.stringify(
+        {
+          title: `Release notes from ${repo.split('/')[1]}`,
+          items: formattedReleases,
+        },
+        null,
+        2,
+      ),
+    );
+
+    console.log(`Converted and saved to ${jsonPath}`);
+    console.log(`Fetched ${formattedReleases.length} releases from GitHub API`);
+    return formattedReleases;
+  } catch (error) {
+    console.error(`Error fetching GitHub releases for ${repo}:`, error.message);
+    // Fallback to Atom feed if GitHub API fails
+    console.log("Falling back to Atom feed...");
+    return await fetchAndParseFeed(
+      `https://github.com/${repo}/releases.atom`,
+      filename,
+    );
+  }
+}
+
 async function fetchAndParseFeed(url, filename) {
   try {
     const fetch = (await import("node-fetch")).default;
@@ -82,6 +153,15 @@ async function fetchAndParseFeed(url, filename) {
         );
 
         console.log(`Converted and saved to ${jsonPath}`);
+        console.log(`Fetched ${releases.length} releases from Atom feed`);
+        
+        // Log feed analysis for debugging
+        if (url.includes('ublue-os/bluefin/releases.atom')) {
+          const gtsCount = releases.filter(r => r.title.startsWith('gts-')).length;
+          const stableCount = releases.filter(r => r.title.startsWith('stable-')).length;
+          console.log(`  → GTS releases: ${gtsCount}, Stable releases: ${stableCount}`);
+        }
+        
         resolve(releases);
       });
     });
@@ -146,12 +226,16 @@ async function fetchGitHubReleases(repo, filename) {
 }
 
 async function main() {
-  await fetchAndParseFeed(
-    "https://github.com/ublue-os/bluefin/releases.atom",
+  console.log("Starting feed fetch process...");
+  console.log("Note: Trying GitHub API first (30 releases), falling back to Atom feeds (10 releases)");
+  
+  // Try GitHub API first for more releases, fallback to Atom feeds
+  await fetchGitHubReleases(
+    "ublue-os/bluefin", 
     "bluefin-releases.xml",
   );
-  await fetchAndParseFeed(
-    "https://github.com/ublue-os/bluefin-lts/releases.atom",
+  await fetchGitHubReleases(
+    "ublue-os/bluefin-lts", 
     "bluefin-lts-releases.xml",
   );
 }
