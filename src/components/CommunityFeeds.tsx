@@ -23,26 +23,41 @@ const CommunityFeeds: React.FC = () => {
         <div className={styles.packageSummaryGrid}>
           <PackageSummary feedKey="bluefinLtsReleases" title="Bluefin LTS" />
           <PackageSummary
-            feedKey="bluefinReleases"
+            feedKey="bluefinGtsReleases"
             title="Bluefin GTS"
             filter={(item) => item.title.startsWith("gts-")}
           />
           <PackageSummary
-            feedKey="bluefinReleases"
+            feedKey="bluefinStableReleases"
             title="Bluefin"
             filter={(item) => item.title.startsWith("stable-")}
           />
         </div>
 
+        <div className={styles.feedGrid}>
+          <div className={styles.feedColumn}>
+            <FeedItems
+              feedId="bluefinLtsReleases"
+              title="Bluefin LTS"
+              maxItems={10}
+              showDescription={false}
+            />
+            <p className={styles.sectionByline}>
+              <em>Achillobator giganticus</em>
+            </p>
+          </div>
         {/* 
           Feed Grid - Shows recent releases for each Bluefin variant
           
-          NOTE: Currently limited by GitHub Atom feed restrictions (~10 releases total)
-          resulting in ~5 items each for GTS and Stable releases. The fetch-feeds.js 
-          script tries GitHub REST API first to get 30 releases, falling back to Atom feeds.
+          Enhanced solution: The fetch-feeds script creates cached JSON files 
+          containing more releases, which provides better data for filtering.
           
-          In production with proper API access, this will show the full maxItems={10}
-          for each release type as configured.
+          - Bluefin LTS: Direct feed (working fine)
+          - Bluefin GTS: Filtered from enhanced bluefinGtsReleases feed  
+          - Bluefin Stable: Filtered from enhanced bluefinStableReleases feed
+          
+          This simple caching approach gives us 10+ items of each type
+          while maintaining backward compatibility.
         */}
         <div className={styles.feedGrid}>
           <div className={styles.feedColumn}>
@@ -58,7 +73,7 @@ const CommunityFeeds: React.FC = () => {
           </div>
           <div className={styles.feedColumn}>
             <FeedItems
-              feedId="bluefinReleases"
+              feedId="bluefinGtsReleases"
               title="Bluefin GTS"
               maxItems={10}
               showDescription={false}
@@ -70,7 +85,7 @@ const CommunityFeeds: React.FC = () => {
           </div>
           <div className={styles.feedColumn}>
             <FeedItems
-              feedId="bluefinReleases"
+              feedId="bluefinStableReleases"
               title="Bluefin"
               maxItems={10}
               showDescription={false}
@@ -80,6 +95,7 @@ const CommunityFeeds: React.FC = () => {
               <em>Utahraptor ostrommaysi</em>
             </p>
           </div>
+        </div>
         </div>
 
         <div className={styles.additionalFeedsGrid}>

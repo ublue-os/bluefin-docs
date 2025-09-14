@@ -15,7 +15,8 @@
     "typecheck": "tsc",
     "prettier": "prettier --write .",
     "prettier-lint": "prettier --check .",
-    "fetch-feeds": "node scripts/fetch-feeds.js"
+    "fetch-feeds": "node scripts/fetch-feeds.js",
+    "update-cached-feeds": "node scripts/update-cached-feeds.js"
   },
   "dependencies": {
     "@1password/docusaurus-plugin-stored-data": "^1.0.0",

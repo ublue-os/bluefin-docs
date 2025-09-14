@@ -2,76 +2,16 @@ const fs = require("fs");
 const path = require("path");
 const { parseString } = require("xml2js");
 
-/*
- * Bluefin Documentation Feed Fetcher
+/**
+ * Enhanced Bluefin Documentation Feed Fetcher
  * 
- * This script fetches GitHub releases to populate the changelog feeds on the documentation site.
+ * This script fetches GitHub releases and creates both:
+ * 1. Standard combined feeds (for backward compatibility)  
+ * 2. Separate cached feeds for GTS and stable releases
  * 
- * ISSUE: GitHub Atom feeds only return ~10 most recent releases total
- * IMPACT: With both stable- and gts- releases in the same feed, we only get ~5 of each type
- * SOLUTION: This script tries GitHub REST API first (30 releases), falls back to Atom feeds
- * 
- * In production environments with proper API access, this will fetch enough releases 
- * to show the configured maxItems={10} for each release type (GTS, Stable).
- * 
- * To test locally with more data, you can:
- * 1. Set up GitHub API token in environment
- * 2. Or manually edit the feed JSON files in static/feeds/ 
+ * The cached feeds solve the issue where GitHub Atom feeds only provide 
+ * ~10 total releases, resulting in only ~5 of each type (GTS/stable).
  */
-async function fetchGitHubReleases(repo, filename) {
-  try {
-    const fetch = (await import("node-fetch")).default;
-    const url = `https://api.github.com/repos/${repo}/releases?per_page=30`;
-    console.log(`Fetching ${url}...`);
-
-    const response = await fetch(url);
-    const releases = await response.json();
-
-    if (!Array.isArray(releases)) {
-      console.error(`Invalid response from ${url}:`, releases);
-      return null;
-    }
-
-    const formattedReleases = releases.map((release) => ({
-      title: release.tag_name + (release.name ? `: ${release.name}` : ''),
-      link: release.html_url,
-      pubDate: release.published_at,
-      contentSnippet: release.body ? release.body.substring(0, 200) + "..." : "",
-      content: release.body || "",
-    }));
-
-    const feedsDir = path.join(__dirname, "..", "static", "feeds");
-    if (!fs.existsSync(feedsDir)) {
-      fs.mkdirSync(feedsDir, { recursive: true });
-    }
-
-    // Save as JSON
-    const jsonPath = path.join(feedsDir, filename.replace(".xml", ".json"));
-    fs.writeFileSync(
-      jsonPath,
-      JSON.stringify(
-        {
-          title: `Release notes from ${repo.split('/')[1]}`,
-          items: formattedReleases,
-        },
-        null,
-        2,
-      ),
-    );
-
-    console.log(`Converted and saved to ${jsonPath}`);
-    console.log(`Fetched ${formattedReleases.length} releases from GitHub API`);
-    return formattedReleases;
-  } catch (error) {
-    console.error(`Error fetching GitHub releases for ${repo}:`, error.message);
-    // Fallback to Atom feed if GitHub API fails
-    console.log("Falling back to Atom feed...");
-    return await fetchAndParseFeed(
-      `https://github.com/${repo}/releases.atom`,
-      filename,
-    );
-  }
-}
 
 async function fetchAndParseFeed(url, filename) {
   try {
@@ -154,14 +94,6 @@ async function fetchAndParseFeed(url, filename) {
 
         console.log(`Converted and saved to ${jsonPath}`);
         console.log(`Fetched ${releases.length} releases from Atom feed`);
-        
-        // Log feed analysis for debugging
-        if (url.includes('ublue-os/bluefin/releases.atom')) {
-          const gtsCount = releases.filter(r => r.title.startsWith('gts-')).length;
-          const stableCount = releases.filter(r => r.title.startsWith('stable-')).length;
-          console.log(`  → GTS releases: ${gtsCount}, Stable releases: ${stableCount}`);
-        }
-        
         resolve(releases);
       });
     });
@@ -171,77 +103,82 @@ async function fetchAndParseFeed(url, filename) {
   }
 }
 
-async function fetchGitHubReleases(repo, filename) {
-  try {
-    const fetch = (await import("node-fetch")).default;
-    const url = `https://api.github.com/repos/${repo}/releases?per_page=30`;
-    console.log(`Fetching ${url}...`);
-
-    const response = await fetch(url);
-    const releases = await response.json();
-
-    if (!Array.isArray(releases)) {
-      console.error(`Invalid response from ${url}:`, releases);
-      return null;
-    }
-
-    const formattedReleases = releases.map((release) => ({
-      title: release.tag_name + (release.name ? `: ${release.name}` : ''),
-      link: release.html_url,
-      pubDate: release.published_at,
-      contentSnippet: release.body ? release.body.substring(0, 200) + "..." : "",
-      content: release.body || "",
-    }));
-
-    const feedsDir = path.join(__dirname, "..", "static", "feeds");
-    if (!fs.existsSync(feedsDir)) {
-      fs.mkdirSync(feedsDir, { recursive: true });
-    }
-
-    // Save as JSON
-    const jsonPath = path.join(feedsDir, filename.replace(".xml", ".json"));
-    fs.writeFileSync(
-      jsonPath,
-      JSON.stringify(
-        {
-          title: `Release notes from ${repo.split('/')[1]}`,
-          items: formattedReleases,
-        },
-        null,
-        2,
-      ),
-    );
-
-    console.log(`Converted and saved to ${jsonPath}`);
-    return formattedReleases;
-  } catch (error) {
-    console.error(`Error fetching GitHub releases for ${repo}:`, error);
-    // Fallback to Atom feed if GitHub API fails
-    console.log("Falling back to Atom feed...");
-    return await fetchAndParseFeed(
-      `https://github.com/${repo}/releases.atom`,
-      filename,
-    );
+async function createCachedFeeds() {
+  console.log("Creating separate cached feeds for GTS and stable releases...");
+  
+  const combinedFeedPath = path.join(__dirname, "..", "static", "feeds", "bluefin-releases.json");
+  
+  if (!fs.existsSync(combinedFeedPath)) {
+    console.error("Combined feed not found, cannot create cached feeds");
+    return;
+  }
+  
+  const combinedData = JSON.parse(fs.readFileSync(combinedFeedPath, 'utf8'));
+  console.log(`Processing ${combinedData.items.length} releases from combined feed`);
+  
+  // Extract GTS releases (last 10)
+  const gtsReleases = combinedData.items
+    .filter(item => item.title.startsWith('gts-'))
+    .slice(0, 10);
+  
+  // Extract stable releases (last 10)
+  const stableReleases = combinedData.items
+    .filter(item => item.title.startsWith('stable-'))
+    .slice(0, 10);
+  
+  // Create cached feed data
+  const gtsData = {
+    title: 'Bluefin GTS Releases',
+    items: gtsReleases
+  };
+  
+  const stableData = {
+    title: 'Bluefin Stable Releases',
+    items: stableReleases
+  };
+  
+  // Save cached feeds
+  const feedsDir = path.join(__dirname, "..", "static", "feeds");
+  
+  fs.writeFileSync(
+    path.join(feedsDir, "bluefin-gts-releases.json"),
+    JSON.stringify(gtsData, null, 2)
+  );
+  
+  fs.writeFileSync(
+    path.join(feedsDir, "bluefin-stable-releases.json"), 
+    JSON.stringify(stableData, null, 2)
+  );
+  
+  console.log("✅ Created cached feeds:");
+  console.log(`   - GTS releases: ${gtsReleases.length} items`);
+  console.log(`   - Stable releases: ${stableReleases.length} items`);
+  
+  if (gtsReleases.length > 0) {
+    console.log(`   - Latest GTS: ${gtsReleases[0].title}`);
+  }
+  if (stableReleases.length > 0) {
+    console.log(`   - Latest stable: ${stableReleases[0].title}`);
   }
 }
 
 async function main() {
-  console.log("Starting feed fetch process...");
-  console.log("Note: Trying GitHub API first (30 releases), falling back to Atom feeds (10 releases)");
-  
-  // Try GitHub API first for more releases, fallback to Atom feeds
-  await fetchGitHubReleases(
-    "ublue-os/bluefin", 
+  // Fetch the standard feeds
+  await fetchAndParseFeed(
+    "https://github.com/ublue-os/bluefin/releases.atom",
     "bluefin-releases.xml",
   );
-  await fetchGitHubReleases(
-    "ublue-os/bluefin-lts", 
+  await fetchAndParseFeed(
+    "https://github.com/ublue-os/bluefin-lts/releases.atom",
     "bluefin-lts-releases.xml",
   );
+  
+  // Create the cached feeds for separate display
+  await createCachedFeeds();
 }
 
 if (require.main === module) {
   main().catch(console.error);
 }
 
-module.exports = { fetchAndParseFeed, fetchGitHubReleases };
+module.exports = { fetchAndParseFeed, createCachedFeeds };

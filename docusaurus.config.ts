@@ -69,6 +69,8 @@ const config: Config = {
       {
         data: {
           bluefinReleases: "https://github.com/ublue-os/bluefin/releases.atom",
+          bluefinGtsReleases: "https://github.com/ublue-os/bluefin/releases.atom",
+          bluefinStableReleases: "https://github.com/ublue-os/bluefin/releases.atom",
           bluefinLtsReleases:
             "https://github.com/ublue-os/bluefin-lts/releases.atom",
           bluefinDiscussions:
