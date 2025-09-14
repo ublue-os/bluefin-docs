@@ -25,27 +25,13 @@ const CommunityFeeds: React.FC = () => {
           <PackageSummary
             feedKey="bluefinGtsReleases"
             title="Bluefin GTS"
-            filter={(item) => item.title.startsWith("gts-")}
           />
           <PackageSummary
             feedKey="bluefinStableReleases"
             title="Bluefin"
-            filter={(item) => item.title.startsWith("stable-")}
           />
         </div>
 
-        <div className={styles.feedGrid}>
-          <div className={styles.feedColumn}>
-            <FeedItems
-              feedId="bluefinLtsReleases"
-              title="Bluefin LTS"
-              maxItems={10}
-              showDescription={false}
-            />
-            <p className={styles.sectionByline}>
-              <em>Achillobator giganticus</em>
-            </p>
-          </div>
         {/* 
           Feed Grid - Shows recent releases for each Bluefin variant
           
@@ -53,8 +39,8 @@ const CommunityFeeds: React.FC = () => {
           containing more releases, which provides better data for filtering.
           
           - Bluefin LTS: Direct feed (working fine)
-          - Bluefin GTS: Filtered from enhanced bluefinGtsReleases feed  
-          - Bluefin Stable: Filtered from enhanced bluefinStableReleases feed
+          - Bluefin GTS: Uses cached bluefinGtsReleases feed  
+          - Bluefin Stable: Uses cached bluefinStableReleases feed
           
           This simple caching approach gives us 10+ items of each type
           while maintaining backward compatibility.
@@ -77,7 +63,6 @@ const CommunityFeeds: React.FC = () => {
               title="Bluefin GTS"
               maxItems={10}
               showDescription={false}
-              filter={(item) => item.title.startsWith("gts-")}
             />
             <p className={styles.sectionByline}>
               <em>Deinonychus antirrhopus</em>
@@ -89,13 +74,11 @@ const CommunityFeeds: React.FC = () => {
               title="Bluefin"
               maxItems={10}
               showDescription={false}
-              filter={(item) => item.title.startsWith("stable-")}
             />
             <p className={styles.sectionByline}>
               <em>Utahraptor ostrommaysi</em>
             </p>
           </div>
-        </div>
         </div>
 
         <div className={styles.additionalFeedsGrid}>

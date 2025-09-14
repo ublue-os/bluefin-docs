@@ -1,5 +1,6 @@
 import React from "react";
 import useStoredFeed from "@theme/useStoredFeed";
+import useCachedFeed from "../theme/hooks/useCachedFeed";
 import styles from "./FeedItems.module.css";
 import { PACKAGE_PATTERNS, extractVersionChange } from "../config/packageConfig";
 
@@ -119,12 +120,24 @@ const FeedItems: React.FC<FeedItemsProps> = ({
   filter,
 }) => {
   try {
-    const feedData: ParsedFeed = useStoredFeed(feedId);
+    // Use cached feed for GTS and Stable releases, stored feed for others
+    const cachedFeedData = useCachedFeed(feedId);
+    const storedFeedData = useStoredFeed(feedId);
+    
+    // Choose the appropriate data source
+    const feedData: ParsedFeed = cachedFeedData ? 
+      { items: cachedFeedData.items } as ParsedFeed : 
+      storedFeedData;
 
     // Handle different RSS/Atom feed structures
     let items: FeedItem[] = [];
 
-    if (feedData?.rss?.channel?.item) {
+    // Handle cached feed format (direct items array)
+    if (cachedFeedData?.items) {
+      items = cachedFeedData.items;
+    }
+    // Handle stored feed formats (RSS/Atom)
+    else if (feedData?.rss?.channel?.item) {
       items = Array.isArray(feedData.rss.channel.item)
         ? feedData.rss.channel.item
         : [feedData.rss.channel.item];

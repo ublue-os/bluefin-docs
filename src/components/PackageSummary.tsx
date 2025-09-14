@@ -1,5 +1,6 @@
 import React from "react";
 import useStoredFeed from "@theme/useStoredFeed";
+import useCachedFeed from "../theme/hooks/useCachedFeed";
 import Heading from "@theme/Heading";
 import { PACKAGE_PATTERNS, extractPackageVersion } from "../config/packageConfig";
 
@@ -19,13 +20,25 @@ export default function PackageSummary({
   title,
   filter,
 }: PackageSummaryProps) {
-  const feedData = useStoredFeed(feedKey);
+  // Use cached feed for GTS and Stable releases, stored feed for others
+  const cachedFeedData = useCachedFeed(feedKey);
+  const storedFeedData = useStoredFeed(feedKey);
+  
+  // Choose the appropriate data source
+  const feedData = cachedFeedData ? 
+    { items: cachedFeedData.items } : 
+    storedFeedData;
 
   const getLatestPackageVersions = (): PackageInfo[] => {
     // Based on upstream FeedItems.tsx, try all possible structures
     let items = [];
 
-    if (feedData?.rss?.channel?.item) {
+    // Handle cached feed format (direct items array)
+    if (cachedFeedData?.items) {
+      items = cachedFeedData.items;
+    }
+    // Handle stored feed formats (RSS/Atom) 
+    else if (feedData?.rss?.channel?.item) {
       items = Array.isArray(feedData.rss.channel.item)
         ? feedData.rss.channel.item
         : [feedData.rss.channel.item];
