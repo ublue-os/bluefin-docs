@@ -1,25 +1,23 @@
 ---
-title: Bluefin Beta now available with Fedora 43 and GNOME 49
+title: Bluefin Beta now available with GNOME 49
 slug: bluefin-beta-f43
 authors: castrojo
-tags: [announcements, beta]
+tags: [announcements]
 ---
 
-Guardians, Bluefin Beta has been updated to Fedora 43 featuring GNOME 49. The `bluefin:beta` tag now provides early access to the latest components while `bluefin:stable` remains on Fedora 42 with GNOME 48.
+Guardians, Bluefin Beta has been updated GNOME 49 on a to Fedora 43 base. The `bluefin:beta` tag now provides early access to the latest components.
 
 ## What's in Bluefin Beta?
 
-Bluefin Beta (`bluefin:beta`) provides a preview of the next major release before it becomes stable. This gives enthusiasts and testers an opportunity to experience the latest features and report issues before the wider rollout.
+Bluefin Beta (`bluefin:beta`) provides a preview of the next major release before it becomes stable. Then in a few weeks this will become the new `bluefin:stable`. 
 
 ### Major Component Updates
 
 The beta includes significant updates to core system components:
 
-- **Fedora 43**: The latest Fedora release with updated packages and improvements
 - **GNOME 49**: The newest GNOME desktop environment with [new features and refinements](https://release.gnome.org/49/)
-- **Linux Kernel**: Updated to the latest stable kernel version included in Fedora 43
-- **systemd**: Updated system and service manager
-- **bootc**: Latest bootable container tools
+- **Fedora 43**: The latest Fedora release with updated packages and improvements
+- **Linux Kernel**: Updated to the latest stable kernel version: FIXME
 
 For detailed information about GNOME 49's new features, visit the [official GNOME 49 release notes](https://release.gnome.org/49/).
 
@@ -80,7 +78,7 @@ Note that beta images receive daily updates and may have occasional issues as th
 
 ## Stability Expectations
 
-Beta images are tested but may have issues that haven't been discovered yet. Report any problems in the [Bluefin issue tracker](https://github.com/ublue-os/bluefin/issues). Testing and feedback help ensure a smooth stable release for all users.
+Beta images are tested but may have issues that haven't been discovered yet. Report any problems in the [Bluefin issue tracker](https://github.com/ublue-os/bluefin/issues). Testing and feedback help ensure a smooth stable release, so if you've got time to help out, jump in!
 
 ## More Information
 
