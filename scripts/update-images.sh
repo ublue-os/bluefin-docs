@@ -36,11 +36,17 @@ format_table_rows() {
         # Get release date
         formatted_date=$(get_release_date "$repo" "$tag")
         
+        # Create full image reference
+        image_ref="ghcr.io/ublue-os/${package}:${tag}"
+        
+        # Create bootc switch command with code block
+        rebase_cmd="\`bootc switch --enforce-container-sigpolicy ${image_ref}\`"
+        
         # Create package URL - point to GHCR package page
         package_url="https://github.com/ublue-os/${repo}/pkgs/container/${package}"
         
         # Output markdown row
-        echo "| \`${tag}\` | ${formatted_date} | [View Package](${package_url}) |"
+        echo "| \`${tag}\` | ${formatted_date} | ${rebase_cmd} | [View Package](${package_url}) |"
     done <<< "$tags"
 }
 
