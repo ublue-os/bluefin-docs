@@ -34,6 +34,7 @@ jobs:
           ./scripts/update-images.sh
 
       - name: Create Pull Request
+        id: cpr
         uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7
         with:
           title: 'chore: update images page'
@@ -48,3 +49,8 @@ jobs:
             - Updated GTS images
             - Updated LTS images
           delete-branch: true
+
+      - name: Check outputs
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
