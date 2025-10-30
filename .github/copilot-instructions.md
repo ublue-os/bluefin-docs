@@ -48,6 +48,13 @@ Run production build locally:
 - `npm run build` -- ensures site builds successfully
 - Manual testing via `npm run start` -- verify your changes work in the browser
 
+**IMPORTANT - Code Formatting:**
+
+- **DO NOT** run `npm run prettier` globally on every task - it formats unrelated files
+- **ONLY** format files you created or modified as part of your specific task
+- Use targeted formatting: `npx prettier --write path/to/your/file.tsx path/to/your/file.css`
+- Only run `npm run prettier` if the user specifically requests it or if instructed in the issue
+
 ## Common Tasks
 
 ### Development Commands
@@ -75,7 +82,11 @@ npm run typecheck
 # Check formatting (many warnings expected on existing files)
 npm run prettier-lint
 
-# Fix formatting issues
+# Fix formatting issues - ONLY USE FOR FILES YOU MODIFIED
+# Better approach: format only your specific files
+npx prettier --write src/pages/yourfile.tsx src/components/yourcomponent.tsx
+
+# Or if user specifically requests global formatting:
 npm run prettier
 
 # Fetch release feeds manually (auto-runs during start/build)

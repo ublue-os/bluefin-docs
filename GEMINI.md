@@ -41,11 +41,16 @@ This command generates static content into the `build` directory and can be serv
 ## Development Conventions
 
 ### Code Style
-This project uses Prettier for code formatting. Before committing any changes, please run the following command to format the code:
+This project uses Prettier for code formatting. 
 
+**IMPORTANT**: Only run `npm run prettier` on files you have created or modified as part of your task. Do NOT run it globally as it will format unrelated files.
+
+To format only your files:
 ```bash
-npm run prettier
+npx prettier --write src/pages/yourfile.tsx src/components/yourfile.tsx
 ```
+
+Or if you must format all, only do so if specifically instructed by the user.
 
 ### Contribution Guidelines
 The `README.md` file states that docs linking to upstream documentation directly with a short summary is preferred. It also mentions that there's likely a reason why something is undocumented.
