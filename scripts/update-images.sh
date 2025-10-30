@@ -74,6 +74,8 @@ current_date=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
     while IFS= read -r line; do
         if [[ "$line" == *"<!-- STABLE_IMAGES_START -->"* ]]; then
             echo "$line"
+            echo "| Image Name | Publication Date | Rebase Command | Package Link |"
+            echo "|------------|------------------|----------------|--------------|"
             echo "$stable_images"
             # Skip until end marker
             while IFS= read -r line && [[ "$line" != *"<!-- STABLE_IMAGES_END -->"* ]]; do
@@ -82,6 +84,8 @@ current_date=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
             echo "$line"
         elif [[ "$line" == *"<!-- GTS_IMAGES_START -->"* ]]; then
             echo "$line"
+            echo "| Image Name | Publication Date | Rebase Command | Package Link |"
+            echo "|------------|------------------|----------------|--------------|"
             echo "$gts_images"
             while IFS= read -r line && [[ "$line" != *"<!-- GTS_IMAGES_END -->"* ]]; do
                 :
@@ -89,6 +93,8 @@ current_date=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
             echo "$line"
         elif [[ "$line" == *"<!-- LTS_IMAGES_START -->"* ]]; then
             echo "$line"
+            echo "| Image Name | Publication Date | Rebase Command | Package Link |"
+            echo "|------------|------------------|----------------|--------------|"
             echo "$lts_images"
             while IFS= read -r line && [[ "$line" != *"<!-- LTS_IMAGES_END -->"* ]]; do
                 :
