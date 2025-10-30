@@ -1,0 +1,490 @@
+.chooserMain {
+  padding: 2rem 1rem;
+  min-height: 80vh;
+}
+
+.imageChooser {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 500px;
+}
+
+/* Release Selection */
+.releaseSelection {
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+}
+
+.releaseGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.releaseBox {
+  position: relative;
+  height: 400px;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  border: 3px solid transparent;
+  background: var(--ifm-background-surface-color);
+}
+
+.releaseBox:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.releaseBox.recommended {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 20px rgba(79, 156, 249, 0.3);
+}
+
+.releaseImage {
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.releaseOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.5) 40%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+  display: flex;
+  align-items: flex-end;
+  padding: 1.5rem;
+  color: white;
+  border-radius: 12px;
+}
+
+.releaseContent {
+  width: 100%;
+}
+
+.releaseHeader {
+  margin-bottom: 0.75rem;
+}
+
+.releaseTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.releaseSubtitle {
+  font-size: 1.5rem;
+  opacity: 0.9;
+  display: block;
+  margin-bottom: 0.5rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.recommendedBadge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--ifm-color-primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+}
+
+.releaseDescription {
+  font-size: 1.5rem;
+  line-height: 1.4;
+  opacity: 0.9;
+  margin: 0 0 1rem 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Version Information */
+.versionInfo {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  min-height: 150px;
+}
+
+.versionItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 1.55rem;
+}
+
+.versionItem:last-child {
+  margin-bottom: 0;
+}
+
+.versionLabel {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  min-width: 60px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.versionValue {
+  font-family: "Courier New", monospace;
+  color: #93c5fd;
+  font-weight: 500;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-size: 1.55rem;
+}
+
+/* Step Selection */
+.stepSelection {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.stepHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.backButton {
+  font-weight: 700;
+  height: 36px;
+  line-height: 36px;
+  border: 2px solid var(--ifm-color-primary);
+  background-color: var(--ifm-color-primary);
+  color: white;
+  border-radius: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 20px;
+  font-size: 1.7rem;
+  text-decoration: none;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 24px;
+}
+
+.backButton:hover {
+  background-color: var(--ifm-color-primary-dark);
+  border-color: var(--ifm-color-primary-dark);
+}
+
+.stepHeader h3 {
+  font-size: 2.3rem;
+  font-weight: bold;
+  margin: 0;
+  color: var(--ifm-color-emphasis-800);
+}
+
+.optionsGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+.optionButton {
+  padding: 1.5rem;
+  border: 2px solid var(--ifm-color-emphasis-400);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-color-emphasis-800);
+  font-size: 1.6rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.optionButton:hover:not(:disabled) {
+  border-color: var(--ifm-color-primary);
+  background: var(--ifm-color-primary-lightest);
+}
+
+.optionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Download Section */
+.downloadSection {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.downloadSummary {
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.decisionSummary h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ifm-color-emphasis-800);
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+}
+
+.decisionItems {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.decisionItem {
+  padding: 1rem;
+  border: 2px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+}
+
+.decisionLabel {
+  display: block;
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: var(--ifm-color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.decisionValue {
+  display: block;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--ifm-color-emphasis-900);
+  margin-bottom: 1rem;
+}
+
+.decisionSubtitle {
+  display: block;
+  font-size: 1.6rem;
+  color: var(--ifm-color-emphasis-700);
+  font-style: italic;
+}
+
+.generatedFilename {
+  padding: 1rem;
+  background: var(--ifm-color-primary-lightest);
+  border: 1px solid var(--ifm-color-primary-light);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.filenameLabel {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--ifm-color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.filenameValue {
+  display: block;
+  font-family: "Courier New", monospace;
+  font-size: 1.65rem;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-900);
+  background: var(--ifm-background-color);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  word-break: break-all;
+}
+
+.downloadActions {
+  text-align: center;
+}
+
+.downloadButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  height: 44px;
+  line-height: 44px;
+  border: 2px solid var(--ifm-color-primary);
+  background-color: var(--ifm-color-primary);
+  color: white;
+  border-radius: 22px;
+  padding: 0 25px;
+  font-size: 1.75rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.downloadButton:hover {
+  background-color: var(--ifm-color-primary-dark);
+  border-color: var(--ifm-color-primary-dark);
+  color: white;
+  text-decoration: none;
+}
+
+.downloadIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.secondaryActions {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--ifm-color-emphasis-400);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-color-emphasis-800);
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  border-color: var(--ifm-color-primary);
+  background: var(--ifm-color-primary-lightest);
+  color: var(--ifm-color-emphasis-900);
+  text-decoration: none;
+}
+
+.btn svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.documentationNote {
+  background: var(--ifm-color-primary-lightest);
+  border: 1px solid var(--ifm-color-primary-light);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 3rem;
+  color: var(--ifm-color-emphasis-800);
+  text-align: left;
+}
+
+.documentationNote a {
+  color: var(--ifm-color-primary-dark);
+  text-decoration: underline;
+}
+
+.documentationNote a:hover {
+  color: var(--ifm-color-primary-darker);
+}
+
+.documentationNote code {
+  background: var(--ifm-background-color);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.startOverButton {
+  font-weight: 700;
+  height: 36px;
+  line-height: 36px;
+  border: 2px solid var(--ifm-color-primary);
+  background-color: var(--ifm-color-primary);
+  color: white;
+  border-radius: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 20px;
+  font-size: 1.7rem;
+  text-decoration: none;
+  margin: 0 auto;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.startOverButton:hover {
+  background-color: var(--ifm-color-primary-dark);
+  border-color: var(--ifm-color-primary-dark);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .releaseGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .releaseBox {
+    height: 350px;
+  }
+
+  .decisionSummary h4 {
+    font-size: 1.25rem;
+  }
+
+  .decisionItems {
+    gap: 1rem;
+  }
+
+  .decisionItem {
+    padding: 0.75rem;
+  }
+
+  .decisionValue {
+    font-size: 1.1rem;
+  }
+
+  .generatedFilename {
+    padding: 0.75rem;
+  }
+
+  .filenameValue {
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .secondaryActions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .stepHeader h3 {
+    font-size: 1.8rem;
+  }
+
+  .optionButton {
+    font-size: 1.4rem;
+  }
+}

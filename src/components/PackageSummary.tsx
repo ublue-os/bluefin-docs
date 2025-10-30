@@ -1,110 +1,22 @@
 import React from "react";
-import useStoredFeed from "@theme/useStoredFeed";
 import Heading from "@theme/Heading";
-import {
-  PACKAGE_PATTERNS,
-  extractPackageVersion,
-} from "../config/packageConfig";
-
-interface PackageInfo {
-  name: string;
-  version: string;
-}
+import { useStreamVersions, PackageInfo } from "../hooks/useStreamVersions";
 
 interface PackageSummaryProps {
-  feedKey: string;
+  stream: "lts" | "gts" | "stable";
   title: string;
-  filter?: (item: any) => boolean;
 }
 
-export default function PackageSummary({
-  feedKey,
-  title,
-  filter,
-}: PackageSummaryProps) {
-  const feedData = useStoredFeed(feedKey);
+export default function PackageSummary({ stream, title }: PackageSummaryProps) {
+  const streamVersions = useStreamVersions();
 
-  const getLatestPackageVersions = (): PackageInfo[] => {
-    // Based on upstream FeedItems.tsx, try all possible structures
-    let items = [];
-
-    if (feedData?.rss?.channel?.item) {
-      items = Array.isArray(feedData.rss.channel.item)
-        ? feedData.rss.channel.item
-        : [feedData.rss.channel.item];
-    } else if (feedData?.channel?.item) {
-      items = Array.isArray(feedData.channel.item)
-        ? feedData.channel.item
-        : [feedData.channel.item];
-    } else if (feedData?.feed?.entry) {
-      items = Array.isArray(feedData.feed.entry)
-        ? feedData.feed.entry
-        : [feedData.feed.entry];
-    }
-
-    if (items.length === 0) {
-      return [];
-    }
-
-    // Apply filter if provided
-    if (filter) {
-      items = items.filter(filter);
-    }
-
-    if (items.length === 0) {
-      return [];
-    }
-
-    // Look through recent releases (up to 10) to find the latest version of each package
-    const packages: PackageInfo[] = [];
-    const maxItemsToSearch = Math.min(10, items.length);
-
-    // Helper function to extract package versions from content
-    const extractPackageFromContent = (
-      content: string,
-      packageName: string,
-      pattern: RegExp,
-    ): string | null => {
-      return extractPackageVersion(content, pattern);
-    };
-
-    // Use centralized package patterns
-    const packagePatterns = PACKAGE_PATTERNS;
-
-    // For each package, find the latest version from recent releases
-    for (const pkg of packagePatterns) {
-      for (let i = 0; i < maxItemsToSearch; i++) {
-        const item = items[i];
-
-        // Extract content from different possible locations
-        let content = "";
-        if (typeof item.content === "object" && item.content?.value) {
-          content = item.content.value;
-        } else if (typeof item.content === "string") {
-          content = item.content;
-        } else if (item.description) {
-          content = item.description;
-        }
-
-        if (!content) continue;
-
-        const version = extractPackageFromContent(
-          content,
-          pkg.name,
-          pkg.pattern,
-        );
-        if (version) {
-          // Found this package version, add it and stop looking for this package
-          packages.push({ name: pkg.name, version });
-          break;
-        }
-      }
-    }
-
-    return packages;
-  };
-
-  const packages = getLatestPackageVersions();
+  // Get packages for the specified stream
+  const packages: PackageInfo[] =
+    stream === "lts"
+      ? streamVersions.ltsPackages
+      : stream === "gts"
+        ? streamVersions.gtsPackages
+        : streamVersions.stablePackages;
 
   if (packages.length === 0) {
     return null;
